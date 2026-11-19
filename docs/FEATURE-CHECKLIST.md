@@ -1,5 +1,7 @@
 # 現行功能檢核表
 
+擴充與開關必須另填 [X1–X8契約](EXTENSION-CONTRACT.md)。目前已啟用架構lint；handler registry、policy resolver與完整TS重寫尚待實作，不列為已交付功能。
+
 每次 review 必須同時填 [27條驗收標準](ACCEPTANCE.md) 與下表。不可用「測試通過」取代瀏覽器觀察；涉及公司或真人的欄位未取得證據時標 Unknown。變更相關項必須重跑；其餘可引用同版本未受影響的證據。D/P 是 agent 證據，H/I 分別是人與產品整合證據。
 
 | ID／現行能力 | 可接受 | 不符合標準 | 證據與公司調整入口 |

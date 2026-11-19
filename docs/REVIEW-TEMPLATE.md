@@ -9,6 +9,7 @@
 - 本輪變更與受影響的案例：
 - 畫面環境（viewport／縮放／瀏覽器）：
 - 本輪總判定：本階段通過／需修改／證據不足
+- 擴充／設定契約X1–X8逐項狀態、lint反例與行為／畫面證據（見EXTENSION-CONTRACT.md）：
 - [FEATURE-CHECKLIST.md](FEATURE-CHECKLIST.md) F01–F25逐項結果／受影響項／沿用證據理由：
 - 真正Lexical runtime／原始JSON／來源授權與受控修訂答案：
 

@@ -8,7 +8,7 @@
 
 ## 五分鐘本機試用
 
-Node 22.11+（已在 Node 22／24 驗證）；首次安裝需 npm registry，之後測試與 UI 不需外網。
+Node 22.13+（已在 Node 22／24 驗證）；首次安裝需 npm registry，之後測試與 UI 不需外網。
 
 ```sh
 npm ci
@@ -70,3 +70,5 @@ CLI exit code：0 runtime檢查就緒、2 輸入／執行失敗、3 部分可讀
 `npm run corpus:build` 可從固定來源離線再生 JSON；`npm run corpus:check` 驗證來源雜湊及所有生成物無漂移。`npm run verify` 包含此檢查、引擎、runtime、控制器及既有反例測試。GitHub CI 在 Node22／24 執行相同指令。
 
 驗證支持的是本套件的行為。正式 Lexical custom-node 相容性、使用者理解／速度、美感感受與權限正確性，需要公司內證據。不得以本套件測試通過代替產品驗收。
+
+擴充與功能開關依 [X1–X8契約](docs/EXTENSION-CONTRACT.md) 驗收；`npm run lint` 已加入 verify 與 CI。lint 支援新 TypeScript 模組的架構檢查，完整 TS 重寫／policy resolver 尚待實作。

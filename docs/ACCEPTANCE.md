@@ -1,5 +1,7 @@
 # Snapshot Compare：方案與成果驗收標準
 
+擴充／重構／功能開關另須逐項驗收 [EXTENSION-CONTRACT.md](EXTENSION-CONTRACT.md) 的 X1–X8；lint、型別、行為與實際畫面證據不可互相替代。
+
 版本：v1.1，2026-11-19。加入使用者確認的特殊 node 與避免誤導的驗收；適用於 Snapshot Compare 的每次方案 review、原型 review、實作與整合 review。
 
 目標：審查者能準確、有效率且舒適地理解文件變更，不需重讀整份文件。美感、清晰度、正確性與可操作性共同構成品質，不能互相抵銷。

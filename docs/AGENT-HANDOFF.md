@@ -1,5 +1,7 @@
 # 給公司內 Agent 的執行指令
 
+新增node、比較策略、renderer或功能開關時，先讀 [EXTENSION-CONTRACT.md](EXTENSION-CONTRACT.md)，逐項驗收X1–X8；不得以修改lint規則替代處理架構問題。完整TypeScript遷移與policy resolver尚待實作。
+
 可將下面段落連同 repository 一起交給公司 Agent。不需要重做本套件的探索；先確認產品差異，再完成最小可驗證接入。
 
 > 你要將此 Snapshot Compare 成果接入我們現有的 Lexical 文件產品。使用情境是 reviewer 比較兩份保存版本，辨識變更與尚不能確認的部分。請先讀 README、INTEGRATION、FEATURE-CHECKLIST、ACCEPTANCE 與 REVIEW，執行 npm ci、npm run verify 及公開文章試用。既有成果不是公司產品事實；請查閱公司 repo 的實際檔案與 runtime，不要臆測 node schema、版本 API 或權限。不要升級 Lexical，不要把 JSON 轉成 HTML／Markdown 再比較，不要寫回保存版本。先產出有證據的盤點與最小接入方案，接著實作、實際 UI review、修正，最後提供顧客試用。已明確且可逆的工作可自行完成；只有會改變範圍、成功條件或授權的缺口才詢問使用者。

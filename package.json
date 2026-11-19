@@ -3,19 +3,39 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": {"node": ">=22.11.0"},
-  "exports": {".": "./src/index.mjs", "./reference-registry": "./src/reference-registry.mjs"},
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "exports": {
+    ".": "./src/index.mjs",
+    "./reference-registry": "./src/reference-registry.mjs"
+  },
   "scripts": {
     "start": "node server.mjs",
     "test": "node --test tests/*.test.mjs",
     "corpus:build": "node scripts/build-corpus.mjs",
     "corpus:check": "node scripts/build-corpus.mjs --check",
     "compare": "node scripts/compare.mjs",
-    "verify": "npm run corpus:check && npm test"
+    "verify": "npm run lint && npm run corpus:check && npm test",
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "lexical": "0.18.0", "@lexical/headless": "0.18.0", "@lexical/rich-text": "0.18.0",
-    "@lexical/link": "0.18.0", "@lexical/list": "0.18.0", "@lexical/code": "0.18.0", "@lexical/table": "0.18.0",
-    "mdast-util-from-markdown": "2.0.2", "mdast-util-gfm": "3.1.0", "micromark-extension-gfm": "3.0.0"
+    "@lexical/code": "0.18.0",
+    "@lexical/headless": "0.18.0",
+    "@lexical/link": "0.18.0",
+    "@lexical/list": "0.18.0",
+    "@lexical/rich-text": "0.18.0",
+    "@lexical/table": "0.18.0",
+    "lexical": "0.18.0",
+    "mdast-util-from-markdown": "2.0.2",
+    "mdast-util-gfm": "3.1.0",
+    "micromark-extension-gfm": "3.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.15.0",
+    "globals": "17.14.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.73.0"
   }
 }

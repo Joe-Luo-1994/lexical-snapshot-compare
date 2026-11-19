@@ -1,5 +1,7 @@
 # Snapshot Compare agent entry
 
+For extension, flags or TypeScript migration, also read docs/EXTENSION-CONTRACT.md. Run npm run verify (includes zero-warning lint and lint rejection tests). Do not weaken rules, add migration exceptions or inline disables to bypass the contract. New source files must belong to a documented layer; record X1–X8 evidence. TypeScript rewrite and policy resolver are still pending.
+
 Read README.md, docs/AGENT-HANDOFF.md, docs/INTEGRATION.md, docs/ACCEPTANCE.md, and docs/FEATURE-CHECKLIST.md before adoption or behavioral changes.
 
 - Stored Lexical 0.18 JSON is canonical; no upgrade, HTML intermediate, or Markdown round-trip assumption.
