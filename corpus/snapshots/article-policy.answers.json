@@ -1,0 +1,30 @@
+[
+  {
+    "id": "article-policy-n041",
+    "kind": "paragraph",
+    "before": "三個工作天",
+    "after": "十個工作天",
+    "label": "回覆時限三天改十天"
+  },
+  {
+    "id": "article-policy-n059",
+    "kind": "paragraph",
+    "before": "必須獲得技術監督委員會的批准",
+    "after": "得由專案維護者自行核准",
+    "label": "實質修訂核准權限改變"
+  },
+  {
+    "id": "article-policy-n036",
+    "kind": "list",
+    "before": "因某人舉報事件或以證人身份提供事件相關資訊而對其進行報復。",
+    "after": "",
+    "label": "刪除禁止報復條款"
+  },
+  {
+    "id": "article-policy-n052",
+    "kind": "link",
+    "before": "https://www.cncf.io/conduct/faq/",
+    "after": "https://www.cncf.io/conduct/",
+    "label": "FAQ目的地改為準則入口"
+  }
+]

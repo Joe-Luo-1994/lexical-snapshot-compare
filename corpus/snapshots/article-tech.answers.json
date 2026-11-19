@@ -1,0 +1,30 @@
+[
+  {
+    "id": "article-tech-n012",
+    "kind": "paragraph",
+    "before": "probe every 5 seconds",
+    "after": "probe every 30 seconds",
+    "label": "探針頻率5秒改30秒"
+  },
+  {
+    "id": "article-tech-n011",
+    "kind": "code",
+    "before": "periodSeconds: 5",
+    "after": "periodSeconds: 30",
+    "label": "YAML探針頻率同步改30秒"
+  },
+  {
+    "id": "article-tech-n018",
+    "kind": "paragraph",
+    "before": "30 seconds",
+    "after": "90 seconds",
+    "label": "觀察時間30秒改90秒"
+  },
+  {
+    "id": "article-tech-n100",
+    "kind": "quote",
+    "before": "during its whole lifecycle",
+    "after": "only during startup",
+    "label": "readiness適用期間被限縮；測試用錯誤修訂"
+  }
+]

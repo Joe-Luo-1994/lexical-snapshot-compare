@@ -1,0 +1,3461 @@
+{
+  "revision": "exercise",
+  "label": "測試用修訂（非上游版本）",
+  "savedAt": "2026-11-20 · 測試製作",
+  "editorState": {
+    "root": {
+      "children": [
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Configure Liveness, Readiness and Startup Probes",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h1"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "This page shows how to configure liveness, readiness and startup probes for\ncontainers.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "For more information about probes, see\n",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "Liveness, Readiness and Startup Probes",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "link",
+              "version": 1,
+              "rel": null,
+              "target": null,
+              "title": null,
+              "url": "https://kubernetes.io/docs/concepts/workloads/pods/probes"
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ".",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Before you begin",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h2"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "原文網站標記（未展開）：",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "{{< include \"task-tutorial-prereqs.md\" >}}",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Define a liveness command",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h2"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Many applications running for long periods of time eventually transition to\nbroken states, and cannot recover except by being restarted. Kubernetes provides\nliveness probes to detect and remedy such situations.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "In this exercise, you create a Pod that runs a container based on the\n",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "registry.k8s.io/busybox:1.27.2",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " image. Here is the configuration file for the Pod:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "apiVersion: v1\nkind: Pod\nmetadata:\n  labels:\n    test: liveness\n  name: liveness-exec\nspec:\n  containers:\n  - name: liveness\n    image: registry.k8s.io/busybox:1.27.2\n    args:\n    - /bin/sh\n    - -c\n    - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600\n    livenessProbe:\n      exec:\n        command:\n        - cat\n        - /tmp/healthy\n      initialDelaySeconds: 5\n      periodSeconds: 30",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "yaml"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "In the configuration file, you can see that the Pod has a single ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "Container",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ".\nThe ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "periodSeconds",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field specifies that the kubelet should perform a liveness\nprobe every 30 seconds. The ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "initialDelaySeconds",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field tells the kubelet that it\nshould wait 5 seconds before performing the first probe. To perform a probe, the\nkubelet executes the command ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "cat /tmp/healthy",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " in the target container. If the\ncommand succeeds, it returns 0, and the kubelet considers the container to be alive and\nhealthy. If the command returns a non-zero value, the kubelet kills the container\nand restarts it.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "When the container starts, it executes this command:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "/bin/sh -c \"touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600\"",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "For the first 30 seconds of the container's life, there is a ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "/tmp/healthy",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " file.\nSo during the first 30 seconds, the command ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "cat /tmp/healthy",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " returns a success\ncode. After 30 seconds, ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "cat /tmp/healthy",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " returns a failure code.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Create the Pod:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl apply -f https://k8s.io/examples/pods/probe/exec-liveness.yaml",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Within 90 seconds, view the Pod events:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl describe pod liveness-exec",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "The output indicates that no liveness probes have failed yet:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Type    Reason     Age   From               Message\n----    ------     ----  ----               -------\nNormal  Scheduled  11s   default-scheduler  Successfully assigned default/liveness-exec to node01\nNormal  Pulling    9s    kubelet, node01    Pulling image \"registry.k8s.io/busybox:1.27.2\"\nNormal  Pulled     7s    kubelet, node01    Successfully pulled image \"registry.k8s.io/busybox:1.27.2\"\nNormal  Created    7s    kubelet, node01    Created container liveness\nNormal  Started    7s    kubelet, node01    Started container liveness",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "none"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "After 35 seconds, view the Pod events again:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl describe pod liveness-exec",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "At the bottom of the output, there are messages indicating that the liveness\nprobes have failed, and the failed containers have been killed and recreated.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Type     Reason     Age                From               Message\n----     ------     ----               ----               -------\nNormal   Scheduled  57s                default-scheduler  Successfully assigned default/liveness-exec to node01\nNormal   Pulling    55s                kubelet, node01    Pulling image \"registry.k8s.io/busybox:1.27.2\"\nNormal   Pulled     53s                kubelet, node01    Successfully pulled image \"registry.k8s.io/busybox:1.27.2\"\nNormal   Created    53s                kubelet, node01    Created container liveness\nNormal   Started    53s                kubelet, node01    Started container liveness\nWarning  Unhealthy  10s (x3 over 20s)  kubelet, node01    Liveness probe failed: cat: can't open '/tmp/healthy': No such file or directory\nNormal   Killing    10s                kubelet, node01    Container liveness failed liveness probe, will be restarted",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "none"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Wait another 30 seconds, and verify that the container has been restarted:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl get pod liveness-exec",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "The output shows that ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "RESTARTS",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " has been incremented. Note that the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "RESTARTS",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " counter\nincrements as soon as a failed container comes back to the running state:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "NAME            READY     STATUS    RESTARTS   AGE\nliveness-exec   1/1       Running   1          1m",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "none"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Define a liveness HTTP request",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h2"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Another kind of liveness probe uses an HTTP GET request. Here is the configuration\nfile for a Pod that runs a container based on the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "registry.k8s.io/e2e-test-images/agnhost",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " image.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "apiVersion: v1\nkind: Pod\nmetadata:\n  labels:\n    test: liveness\n  name: liveness-http\nspec:\n  containers:\n  - name: liveness\n    image: registry.k8s.io/e2e-test-images/agnhost:2.40\n    args:\n    - liveness\n    livenessProbe:\n      httpGet:\n        path: /healthz\n        port: 8080\n        httpHeaders:\n        - name: Custom-Header\n          value: Awesome\n      initialDelaySeconds: 3\n      periodSeconds: 3",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "yaml"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "In the configuration file, you can see that the Pod has a single container.\nThe ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "periodSeconds",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field specifies that the kubelet should perform a liveness\nprobe every 3 seconds. The ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "initialDelaySeconds",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field tells the kubelet that it\nshould wait 3 seconds before performing the first probe. To perform a probe, the\nkubelet sends an HTTP GET request to the server that is running in the container\nand listening on port 8080. If the handler for the server's ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "/healthz",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " path\nreturns a success code, the kubelet considers the container to be alive and\nhealthy. If the handler returns a failure code, the kubelet kills the container\nand restarts it.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Any code greater than or equal to 200 and less than 400 indicates success. Any\nother code indicates failure.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "You can see the source code for the server in\n",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "server.go",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "link",
+              "version": 1,
+              "rel": null,
+              "target": null,
+              "title": null,
+              "url": "https://github.com/kubernetes/kubernetes/blob/master/test/images/agnhost/liveness/server.go"
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ".",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "For the first 10 seconds that the container is alive, the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "/healthz",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " handler\nreturns a status of 200. After that, the handler returns a status of 500.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "http.HandleFunc(\"/healthz\", func(w http.ResponseWriter, r *http.Request) {\n    duration := time.Now().Sub(started)\n    if duration.Seconds() > 10 {\n        w.WriteHeader(500)\n        w.Write([]byte(fmt.Sprintf(\"error: %v\", duration.Seconds())))\n    } else {\n        w.WriteHeader(200)\n        w.Write([]byte(\"ok\"))\n    }\n})",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "go"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "The kubelet starts performing health checks 3 seconds after the container starts.\nSo the first couple of health checks will succeed. But after 10 seconds, the health\nchecks will fail, and the kubelet will kill and restart the container.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "To try the HTTP liveness check, create a Pod:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl apply -f https://k8s.io/examples/pods/probe/http-liveness.yaml",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "After 10 seconds, view Pod events to verify that liveness probes have failed and\nthe container has been restarted:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl describe pod liveness-http",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "In releases after v1.13, local HTTP proxy environment variable settings do not\naffect the HTTP liveness probe.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Use HTTP/2 cleartext (h2c) with HTTP probes {#use-h2c-with-http-probes}",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h3"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "原文網站標記（未展開）：",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "{{< feature-state feature_gate_name=\"H2CContainerProbe\" >}}",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "By default the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "kubelet",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " sends HTTP/1.1 requests when executing an HTTP probe.\nIf your application serves health endpoints only over HTTP/2 cleartext (h2c),\nyou can add the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "protocol",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field to the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "httpGet",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field in the probe specification and\nspecify a value of ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "HTTP2",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ". This requires the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "H2CContainerProbe",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "\n",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "feature gate",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "link",
+              "version": 1,
+              "rel": null,
+              "target": null,
+              "title": null,
+              "url": "https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/"
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " to be\nenabled on both the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "kube-apiserver",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " and the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "kubelet",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ".",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: h2c-app\nspec:\n  containers:\n  - name: app\n    image: registry.k8s.io/e2e-test-images/agnhost:2.64.0\n    command: [\"/agnhost\", \"h2c-server\", \"--port=8080\"]\n    ports:\n    - containerPort: 8080\n    livenessProbe:\n      httpGet:\n        path: /healthz\n        port: 8080\n        protocol: HTTP2\n      initialDelaySeconds: 5\n      periodSeconds: 10",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "yaml"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "When ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "protocol",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " is set to ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "HTTP2",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ", the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "kubelet",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " connects using HTTP/2 cleartext\n(h2c) — HTTP/2 over plain TCP without TLS. The following configurations aren't\nsupported:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "protocol: HTTP2",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": " and ",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "scheme: HTTPS",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "listitem",
+              "version": 1,
+              "value": 1
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "protocol: HTTP2",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": " and a value in the ",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "host",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": " field",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "listitem",
+              "version": 1,
+              "value": 2
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "list",
+          "version": 1,
+          "listType": "bullet",
+          "start": 1,
+          "tag": "ul"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "If the feature gate is disabled, the API server removes the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "protocol",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "\nfield from new or updated Pods.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Define a TCP liveness probe",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h2"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "A third type of liveness probe uses a TCP socket. With this configuration, the\nkubelet will attempt to open a socket to your container on the specified port.\nIf it can establish a connection, the container is considered healthy, if it\ncan't it is considered a failure.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: goproxy\n  labels:\n    app: goproxy\nspec:\n  containers:\n  - name: goproxy\n    image: registry.k8s.io/goproxy:0.1\n    ports:\n    - containerPort: 8080\n    readinessProbe:\n      tcpSocket:\n        port: 8080\n      initialDelaySeconds: 15\n      periodSeconds: 10\n    livenessProbe:\n      tcpSocket:\n        port: 8080\n      initialDelaySeconds: 15\n      periodSeconds: 10",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "yaml"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "As you can see, configuration for a TCP check is quite similar to an HTTP check.\nThis example uses both readiness and liveness probes. The kubelet will run the\nfirst liveness probe 15 seconds after the container starts. This will attempt to\nconnect to the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "goproxy",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " container on port 8080. If the liveness probe fails,\nthe container will be restarted. The kubelet will continue to run this check\nevery 10 seconds.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "In addition to the liveness probe, this configuration includes a readiness\nprobe. The kubelet will run the first readiness probe 15 seconds after the\ncontainer starts. Similar to the liveness probe, this will attempt to connect to\nthe ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "goproxy",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " container on port 8080. If the probe succeeds, the Pod will be\nmarked as ready and will receive traffic from services. If the readiness probe\nfails, the pod will be marked unready and will not receive traffic from any\nservices.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "To try the TCP liveness check, create a Pod:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl apply -f https://k8s.io/examples/pods/probe/tcp-liveness-readiness.yaml",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "After 15 seconds, view Pod events to verify that liveness probes:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl describe pod goproxy",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Define a gRPC liveness probe",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h2"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "原文網站標記（未展開）：",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "{{< feature-state for_k8s_version=\"v1.27\" state=\"stable\" >}}",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "If your application implements the\n",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "gRPC Health Checking Protocol",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "link",
+              "version": 1,
+              "rel": null,
+              "target": null,
+              "title": null,
+              "url": "https://github.com/grpc/grpc/blob/master/doc/health-checking.md"
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ",\nthis example shows how to configure Kubernetes to use it for application liveness checks.\nSimilarly you can configure readiness and startup probes.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Here is an example manifest:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: etcd-with-grpc\nspec:\n  containers:\n  - name: etcd\n    image: registry.k8s.io/etcd:3.5.1-0\n    command: [ \"/usr/local/bin/etcd\", \"--data-dir\",  \"/var/lib/etcd\", \"--listen-client-urls\", \"http://0.0.0.0:2379\", \"--advertise-client-urls\", \"http://127.0.0.1:2379\", \"--log-level\", \"debug\"]\n    ports:\n    - containerPort: 2379\n    livenessProbe:\n      grpc:\n        port: 2379\n      initialDelaySeconds: 10",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "yaml"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "To try the gRPC liveness check, create a Pod using the command below.\nIn the example below, the etcd pod is configured to use gRPC liveness probe.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl apply -f https://k8s.io/examples/pods/probe/grpc-liveness.yaml",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "After 15 seconds, view Pod events to verify that the liveness check has not failed:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "kubectl describe pod etcd-with-grpc",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "shell"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "When using a gRPC probe, there are some technical details to be aware of:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "The probes run against the pod IP address or its hostname.\nBe sure to configure your gRPC endpoint to listen on the Pod's IP address.",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "listitem",
+              "version": 1,
+              "value": 1
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "The probes connect over plaintext by default. See\n",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Use TLS with gRPC probes",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "link",
+                  "version": 1,
+                  "rel": null,
+                  "target": null,
+                  "title": null,
+                  "url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#grpc-probe-tls"
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": " for how to enable TLS.",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "listitem",
+              "version": 1,
+              "value": 2
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "There are no error codes for built-in probes. All errors are considered as probe failures.",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "listitem",
+              "version": 1,
+              "value": 3
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "If ",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "ExecProbeTimeout",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": " feature gate is set to ",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "false",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": ", grpc-health-probe does ",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 1,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "not",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "\nrespect the ",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "timeoutSeconds",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": " setting (which defaults to 1s), while built-in probe would fail on timeout.",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "listitem",
+              "version": 1,
+              "value": 4
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "list",
+          "version": 1,
+          "listType": "bullet",
+          "start": 1,
+          "tag": "ul"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Use TLS with gRPC probes {#grpc-probe-tls}",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h3"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "原文網站標記（未展開）：",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "{{< feature-state feature_gate_name=\"GRPCContainerProbeTLS\" >}}",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "By default the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "kubelet",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " connects to gRPC health endpoints over plaintext. If\nyour application serves gRPC only over TLS, you can add the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "mode",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field to the\n",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "grpc",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field in the probe specification and specify a value of ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "TLS",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ". This\nrequires the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "GRPCContainerProbeTLS",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "\n",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "feature gate",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "link",
+              "version": 1,
+              "rel": null,
+              "target": null,
+              "title": null,
+              "url": "https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/"
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " to\nbe enabled on both the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "kube-apiserver",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " and the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "kubelet",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ".",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: grpc-tls-app\nspec:\n  containers:\n  - name: app\n    image: registry.k8s.io/e2e-test-images/agnhost:2.40\n    command: [\"/agnhost\", \"grpc-health-checking\", \"--port=8443\"]\n    ports:\n    - containerPort: 8443\n    livenessProbe:\n      grpc:\n        port: 8443\n        mode: TLS\n      initialDelaySeconds: 5\n      periodSeconds: 10",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "yaml"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "When ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "mode",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " is set to ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "TLS",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ", the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "kubelet",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " connects over TLS with\n",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "InsecureSkipVerify",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " and does not verify the server certificate. This matches\nthe behavior of HTTPS probes. Certificate verification is not supported.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "If the feature gate is disabled, the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "kube-apiserver",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " removes the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "mode",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "\nfield from new or updated Pods.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Use a named port",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h2"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "You can use a named ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "port",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "link",
+              "version": 1,
+              "rel": null,
+              "target": null,
+              "title": null,
+              "url": "https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#ports"
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "\nfor HTTP and TCP probes. gRPC probes do not support named ports.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "For example:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "ports:\n- name: liveness-port\n  containerPort: 8080\n\nlivenessProbe:\n  httpGet:\n    path: /healthz\n    port: liveness-port",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "yaml"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Protect slow starting containers with startup probes {#define-startup-probes}",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h2"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Sometimes, you have to deal with applications that require additional startup\ntime on their first initialization. In such cases, it can be tricky to set up\nliveness probe parameters without compromising the fast response to deadlocks\nthat motivated such a probe. The solution is to set up a startup probe with the\nsame command, HTTP or TCP check, with a ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "failureThreshold * periodSeconds",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " long\nenough to cover the worst case startup time.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "So, the previous example would become:",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "ports:\n- name: liveness-port\n  containerPort: 8080\n\nlivenessProbe:\n  httpGet:\n    path: /healthz\n    port: liveness-port\n  failureThreshold: 1\n  periodSeconds: 10\n\nstartupProbe:\n  httpGet:\n    path: /healthz\n    port: liveness-port\n  failureThreshold: 30\n  periodSeconds: 10",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "yaml"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Thanks to the startup probe, the application will have a maximum of 5 minutes\n(30 * 10 = 300s) to finish its startup.\nOnce the startup probe has succeeded once, the liveness probe takes over to\nprovide a fast response to container deadlocks.\nIf the startup probe never succeeds, the container is killed after 300s and\nsubject to the pod's ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "restartPolicy",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": ".",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Define readiness probes",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h2"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Sometimes, applications are temporarily unable to serve traffic.\nFor example, an application might need to load large data or configuration\nfiles during startup, or depend on external services after startup.\nIn such cases, you don't want to kill the application,\nbut you don't want to send it requests either. Kubernetes provides\nreadiness probes to detect and mitigate these situations. A pod with containers\nreporting that they are not ready does not receive traffic through Kubernetes\nServices.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 1,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "note",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "\nReadiness probes run on the container only during startup.",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "paragraph",
+              "version": 1,
+              "textFormat": 0,
+              "textStyle": ""
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "quote",
+          "version": 1
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 1,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "caution",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "\nThe readiness and liveness probes do not depend on each other to succeed.\nIf you want to wait before executing a readiness probe, you should use\n",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "initialDelaySeconds",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": " or a ",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 16,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "startupProbe",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": ".",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "paragraph",
+              "version": 1,
+              "textFormat": 0,
+              "textStyle": ""
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "quote",
+          "version": 1
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Readiness probes are configured similarly to liveness probes. The only difference\nis that you use the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "readinessProbe",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field instead of the ",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 16,
+              "mode": "normal",
+              "style": "",
+              "text": "livenessProbe",
+              "type": "text",
+              "version": 1
+            },
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": " field.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "readinessProbe:\n  exec:\n    command:\n    - /bin/cat\n    - /tmp/healthy\n  initialDelaySeconds: 5\n  periodSeconds: 5",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "code",
+          "version": 1,
+          "language": "yaml"
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Configuration for HTTP and TCP readiness probes also remains identical to\nliveness probes.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "Readiness and liveness probes can be used in parallel for the same container.\nUsing both can ensure that traffic does not reach a container that is not ready\nfor it, and that containers are restarted when they fail.",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "paragraph",
+          "version": 1,
+          "textFormat": 0,
+          "textStyle": ""
+        },
+        {
+          "children": [
+            {
+              "detail": 0,
+              "format": 0,
+              "mode": "normal",
+              "style": "",
+              "text": "What's next",
+              "type": "text",
+              "version": 1
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "heading",
+          "version": 1,
+          "tag": "h2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "Learn more about\n",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Liveness, Readiness and Startup Probes",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "link",
+                  "version": 1,
+                  "rel": null,
+                  "target": null,
+                  "title": null,
+                  "url": "https://kubernetes.io/docs/concepts/workloads/pods/probes/"
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": ".",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "listitem",
+              "version": 1,
+              "value": 1
+            },
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "For the full specification of probe-related fields, see the API reference:\n",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Pod",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "link",
+                  "version": 1,
+                  "rel": null,
+                  "target": null,
+                  "title": null,
+                  "url": "https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/"
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": ",\n",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Container",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "link",
+                  "version": 1,
+                  "rel": null,
+                  "target": null,
+                  "title": null,
+                  "url": "https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container"
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": ",\n",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Probe",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "link",
+                  "version": 1,
+                  "rel": null,
+                  "target": null,
+                  "title": null,
+                  "url": "https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Probe"
+                }
+              ],
+              "direction": null,
+              "format": "",
+              "indent": 0,
+              "type": "listitem",
+              "version": 1,
+              "value": 2
+            }
+          ],
+          "direction": null,
+          "format": "",
+          "indent": 0,
+          "type": "list",
+          "version": 1,
+          "listType": "bullet",
+          "start": 1,
+          "tag": "ul"
+        }
+      ],
+      "direction": null,
+      "format": "",
+      "indent": 0,
+      "type": "root",
+      "version": 1
+    }
+  },
+  "identity": {
+    "version": 1,
+    "namespace": "corpus:article-tech",
+    "nodes": {
+      "/root": "article-tech-n001",
+      "/root/children/0": "article-tech-n002",
+      "/root/children/1": "article-tech-n003",
+      "/root/children/2": "article-tech-n004",
+      "/root/children/2/children/1": "article-tech-n005",
+      "/root/children/3": "article-tech-n006",
+      "/root/children/4": "article-tech-n007",
+      "/root/children/5": "article-tech-n008",
+      "/root/children/6": "article-tech-n009",
+      "/root/children/7": "article-tech-n010",
+      "/root/children/8": "article-tech-n011",
+      "/root/children/9": "article-tech-n012",
+      "/root/children/10": "article-tech-n013",
+      "/root/children/11": "article-tech-n014",
+      "/root/children/12": "article-tech-n015",
+      "/root/children/13": "article-tech-n016",
+      "/root/children/14": "article-tech-n017",
+      "/root/children/15": "article-tech-n018",
+      "/root/children/16": "article-tech-n019",
+      "/root/children/17": "article-tech-n020",
+      "/root/children/18": "article-tech-n021",
+      "/root/children/19": "article-tech-n022",
+      "/root/children/20": "article-tech-n023",
+      "/root/children/21": "article-tech-n024",
+      "/root/children/22": "article-tech-n025",
+      "/root/children/23": "article-tech-n026",
+      "/root/children/24": "article-tech-n027",
+      "/root/children/25": "article-tech-n028",
+      "/root/children/26": "article-tech-n029",
+      "/root/children/27": "article-tech-n030",
+      "/root/children/28": "article-tech-n031",
+      "/root/children/29": "article-tech-n032",
+      "/root/children/30": "article-tech-n033",
+      "/root/children/31": "article-tech-n034",
+      "/root/children/32": "article-tech-n035",
+      "/root/children/32/children/1": "article-tech-n036",
+      "/root/children/33": "article-tech-n037",
+      "/root/children/34": "article-tech-n038",
+      "/root/children/35": "article-tech-n039",
+      "/root/children/36": "article-tech-n040",
+      "/root/children/37": "article-tech-n041",
+      "/root/children/38": "article-tech-n042",
+      "/root/children/39": "article-tech-n043",
+      "/root/children/40": "article-tech-n044",
+      "/root/children/41": "article-tech-n045",
+      "/root/children/42": "article-tech-n046",
+      "/root/children/43": "article-tech-n047",
+      "/root/children/43/children/11": "article-tech-n048",
+      "/root/children/44": "article-tech-n049",
+      "/root/children/45": "article-tech-n050",
+      "/root/children/46": "article-tech-n051",
+      "/root/children/46/children/0": "article-tech-n052",
+      "/root/children/46/children/1": "article-tech-n053",
+      "/root/children/47": "article-tech-n054",
+      "/root/children/48": "article-tech-n055",
+      "/root/children/49": "article-tech-n056",
+      "/root/children/50": "article-tech-n057",
+      "/root/children/51": "article-tech-n058",
+      "/root/children/52": "article-tech-n059",
+      "/root/children/53": "article-tech-n060",
+      "/root/children/54": "article-tech-n061",
+      "/root/children/55": "article-tech-n062",
+      "/root/children/56": "article-tech-n063",
+      "/root/children/57": "article-tech-n064",
+      "/root/children/58": "article-tech-n065",
+      "/root/children/59": "article-tech-n066",
+      "/root/children/59/children/1": "article-tech-n067",
+      "/root/children/60": "article-tech-n068",
+      "/root/children/61": "article-tech-n069",
+      "/root/children/62": "article-tech-n070",
+      "/root/children/63": "article-tech-n071",
+      "/root/children/64": "article-tech-n072",
+      "/root/children/65": "article-tech-n073",
+      "/root/children/66": "article-tech-n074",
+      "/root/children/67": "article-tech-n075",
+      "/root/children/67/children/0": "article-tech-n076",
+      "/root/children/67/children/1": "article-tech-n077",
+      "/root/children/67/children/1/children/1": "article-tech-n078",
+      "/root/children/67/children/2": "article-tech-n079",
+      "/root/children/67/children/3": "article-tech-n080",
+      "/root/children/68": "article-tech-n081",
+      "/root/children/69": "article-tech-n082",
+      "/root/children/70": "article-tech-n083",
+      "/root/children/70/children/11": "article-tech-n084",
+      "/root/children/71": "article-tech-n085",
+      "/root/children/72": "article-tech-n086",
+      "/root/children/73": "article-tech-n087",
+      "/root/children/74": "article-tech-n088",
+      "/root/children/75": "article-tech-n089",
+      "/root/children/75/children/1": "article-tech-n090",
+      "/root/children/76": "article-tech-n091",
+      "/root/children/77": "article-tech-n092",
+      "/root/children/78": "article-tech-n093",
+      "/root/children/79": "article-tech-n094",
+      "/root/children/80": "article-tech-n095",
+      "/root/children/81": "article-tech-n096",
+      "/root/children/82": "article-tech-n097",
+      "/root/children/83": "article-tech-n098",
+      "/root/children/84": "article-tech-n099",
+      "/root/children/85": "article-tech-n100",
+      "/root/children/85/children/0": "article-tech-n101",
+      "/root/children/86": "article-tech-n102",
+      "/root/children/86/children/0": "article-tech-n103",
+      "/root/children/87": "article-tech-n104",
+      "/root/children/88": "article-tech-n105",
+      "/root/children/89": "article-tech-n106",
+      "/root/children/90": "article-tech-n107",
+      "/root/children/91": "article-tech-n108",
+      "/root/children/92": "article-tech-n109",
+      "/root/children/92/children/0": "article-tech-n110",
+      "/root/children/92/children/0/children/1": "article-tech-n111",
+      "/root/children/92/children/1": "article-tech-n112",
+      "/root/children/92/children/1/children/1": "article-tech-n113",
+      "/root/children/92/children/1/children/3": "article-tech-n114",
+      "/root/children/92/children/1/children/5": "article-tech-n115"
+    }
+  },
+  "provenance": {
+    "sourceFile": "kubernetes-probes.md",
+    "revisionKind": "controlled-test-edit",
+    "notUpstreamHistory": true
+  }
+}

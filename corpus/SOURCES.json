@@ -1,0 +1,85 @@
+{
+  "files": [
+    {
+      "file": "CC-BY-4.0.txt",
+      "source": "https://github.com/kubernetes/website/blob/6a20979cf474462be672e7387c37dfb0f5f285a4/LICENSE",
+      "commit": "6a20979cf474462be672e7387c37dfb0f5f285a4",
+      "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+      "license": "CC-BY-4.0",
+      "attribution": "The Kubernetes Authors"
+    },
+    {
+      "file": "cncf-code-of-conduct-zh-tw.md",
+      "source": "https://github.com/cncf/foundation/blob/f2bb3ab459ee44ef5cddc34f285018b7d37837ea/code-of-conduct-languages/zh-tw.md",
+      "commit": "f2bb3ab459ee44ef5cddc34f285018b7d37837ea",
+      "sha256": "df10338a9bc910567751d12262222f799f77b7c54f0d29b21d12a362b1937233",
+      "license": "CC-BY-4.0",
+      "attribution": "CNCF contributors and Traditional Chinese translation contributors"
+    },
+    {
+      "file": "cncf-license-notices.md",
+      "source": "https://github.com/cncf/foundation/blob/f2bb3ab459ee44ef5cddc34f285018b7d37837ea/license-notices.md",
+      "commit": "f2bb3ab459ee44ef5cddc34f285018b7d37837ea",
+      "sha256": "998ed0193c6a2e32b49d71d67d5549e4213f8a4270fd31df21aca0c5f5b7c353",
+      "license": "CC-BY-4.0",
+      "attribution": "CNCF contributors and Traditional Chinese translation contributors"
+    },
+    {
+      "file": "exec-liveness.yaml",
+      "source": "https://github.com/kubernetes/website/blob/6a20979cf474462be672e7387c37dfb0f5f285a4/content/en/examples/pods/probe/exec-liveness.yaml",
+      "commit": "6a20979cf474462be672e7387c37dfb0f5f285a4",
+      "sha256": "b953accf65b51da25b3760367908aef58d5393189c6369e4644084c906579259",
+      "license": "CC-BY-4.0",
+      "attribution": "The Kubernetes Authors"
+    },
+    {
+      "file": "grpc-liveness.yaml",
+      "source": "https://github.com/kubernetes/website/blob/6a20979cf474462be672e7387c37dfb0f5f285a4/content/en/examples/pods/probe/grpc-liveness.yaml",
+      "commit": "6a20979cf474462be672e7387c37dfb0f5f285a4",
+      "sha256": "54864cb8d77043e32376107927ccbc403e3038ba68df02aa2a30c6f3fe605009",
+      "license": "CC-BY-4.0",
+      "attribution": "The Kubernetes Authors"
+    },
+    {
+      "file": "grpc-tls-liveness.yaml",
+      "source": "https://github.com/kubernetes/website/blob/6a20979cf474462be672e7387c37dfb0f5f285a4/content/en/examples/pods/probe/grpc-tls-liveness.yaml",
+      "commit": "6a20979cf474462be672e7387c37dfb0f5f285a4",
+      "sha256": "ab9d3521b2ddca4d0f276cd24534700bec4bde89f22b79745c1521c5c39286eb",
+      "license": "CC-BY-4.0",
+      "attribution": "The Kubernetes Authors"
+    },
+    {
+      "file": "h2c-liveness.yaml",
+      "source": "https://github.com/kubernetes/website/blob/6a20979cf474462be672e7387c37dfb0f5f285a4/content/en/examples/pods/probe/h2c-liveness.yaml",
+      "commit": "6a20979cf474462be672e7387c37dfb0f5f285a4",
+      "sha256": "74bf93d0a8d7e500abef359314e340c4bfccff2a9a0567de3491cc702df32b66",
+      "license": "CC-BY-4.0",
+      "attribution": "The Kubernetes Authors"
+    },
+    {
+      "file": "http-liveness.yaml",
+      "source": "https://github.com/kubernetes/website/blob/6a20979cf474462be672e7387c37dfb0f5f285a4/content/en/examples/pods/probe/http-liveness.yaml",
+      "commit": "6a20979cf474462be672e7387c37dfb0f5f285a4",
+      "sha256": "1ce438d196fff0241e7716a40a292616d2d02784748a629de4d1048a7358372a",
+      "license": "CC-BY-4.0",
+      "attribution": "The Kubernetes Authors"
+    },
+    {
+      "file": "kubernetes-probes.md",
+      "source": "https://github.com/kubernetes/website/blob/6a20979cf474462be672e7387c37dfb0f5f285a4/content/en/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes.md",
+      "commit": "6a20979cf474462be672e7387c37dfb0f5f285a4",
+      "sha256": "bf80ca8ec4ffa9c71c06a11c515dcb34f18132b4cbe52896b5acd9b5989c6c0c",
+      "license": "CC-BY-4.0",
+      "attribution": "The Kubernetes Authors"
+    },
+    {
+      "file": "tcp-liveness-readiness.yaml",
+      "source": "https://github.com/kubernetes/website/blob/6a20979cf474462be672e7387c37dfb0f5f285a4/content/en/examples/pods/probe/tcp-liveness-readiness.yaml",
+      "commit": "6a20979cf474462be672e7387c37dfb0f5f285a4",
+      "sha256": "a920ef042558a52a976d892957dd7da2f2adea8f8ffdb945efbdecfab5b7f6ad",
+      "license": "CC-BY-4.0",
+      "attribution": "The Kubernetes Authors"
+    }
+  ],
+  "transformation": "Sources preserved verbatim. Corpus generation expands pinned YAML samples, drops site frontmatter/comments, labels unresolved Hugo macros, converts note/caution to quotes, resolves links, and creates native Lexical JSON. B is a controlled edit, never upstream history."
+}
