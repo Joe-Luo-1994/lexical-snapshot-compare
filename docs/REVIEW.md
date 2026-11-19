@@ -11,6 +11,7 @@
 ## 證據入口
 
 - `npm run verify`：來源SHA與再生物一致；**91/91 tests**。包括47組情境、identity、原始資料保留、runtime、非同步競態、navigation分類等；不是91位使用者或91份公司文件。
+- 獨立安裝：從 Git archive 解壓後 `npm ci --ignore-scripts` 與verify皆通過；GitHub Linux clean checkout 的 Node22／24亦通過verify、CLI smoke與效能預算。可查 [CI紀錄](https://github.com/Joe-Luo-1994/lexical-snapshot-compare/actions/workflows/verify.yml)。
 - [Runtime report](../corpus/runtime-report.json)：技術文章 A/B各347個真正 Lexical nodes；規範文章133→131個。四份皆 parse 成功、re-export無差異。Kubernetes四個未展開網站標記保留警示，不能宣稱完全複製網站。
 - CLI：policy A/B以reference registry比較，exit0、ready；不存在registry與malformed等錯誤有測試；partial exit3／failed exit2，見CLI與runtime tests。ready不代表所有內容都精準。
 - `node tests/measure.mjs`：Node22.21.1，合成長文A1181/B1176nodes，25次；p50 14.52ms、p95 15.68ms，預設預算250ms。純比較核心，不含host網路、runtime建立、渲染或人類審查時間。

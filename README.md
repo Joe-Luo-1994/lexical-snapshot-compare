@@ -4,6 +4,8 @@
 
 **公司內 Agent 從 [AGENT-HANDOFF.md](docs/AGENT-HANDOFF.md) 開始。** 本套件可直接驗證與呼叫比較核心；正式產品的 node registry、身分持久化、版本 API、renderer 與權限仍須在公司內查證，不是免調整的產品外掛。
 
+![公開技術文章的程式碼前後核對](evidence/article-tech-code.jpg)
+
 ## 五分鐘本機試用
 
 Node 22.11+（已在 Node 22／24 驗證）；首次安裝需 npm registry，之後測試與 UI 不需外網。

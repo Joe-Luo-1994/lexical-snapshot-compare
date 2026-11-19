@@ -14,7 +14,7 @@ test('late first request cannot replace the selected second pair, even if host i
  const first=c.select(pair),second=c.select({...pair,baselineRevision:'exercise',targetRevision:'source'});waiting[2]();waiting[3]();await second;waiting[0]();waiting[1]();await first;assert.deepEqual(states.map(s=>s.kind),['loading','loading','ready']);assert.equal(states.at(-1).pair.baselineRevision,'exercise');
 });
 test('revision mismatch and denied history never publish an old ready result',async()=>{
- for(const loadSnapshot of [async()=>({...document('source'),documentId:'other-doc'}),async()=>{throw new Error('History access denied');}]){const states=[];const c=createComparisonController({createEditor:createReferenceEditor,onState:s=>states.push(s),loadSnapshot});await c.select(pair);assert.deepEqual(states.map(s=>s.kind),['loading','error']);}
+ for(const loadSnapshot of [async()=>({...document('source'),documentId:'other-doc'}),async()=>document('source'),async()=>{throw new Error('History access denied');}]){const states=[];const c=createComparisonController({createEditor:createReferenceEditor,onState:s=>states.push(s),loadSnapshot});await c.select(pair);assert.deepEqual(states.map(s=>s.kind),['loading','error']);}
 });
 test('dispose suppresses results from an in-flight request',async()=>{
  const waiting=[],states=[];const c=createComparisonController({createEditor:createReferenceEditor,onState:s=>states.push(s),loadSnapshot:({revision})=>new Promise(resolve=>waiting.push(()=>resolve(document(revision))))});const promise=c.select(pair);c.dispose();waiting.forEach(f=>f());await promise;assert.deepEqual(states.map(s=>s.kind),['loading']);
