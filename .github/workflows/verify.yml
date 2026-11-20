@@ -19,3 +19,4 @@ jobs:
       - run: git diff --exit-code -- dist
       - run: node scripts/compare.mjs corpus/snapshots/article-policy.a.json corpus/snapshots/article-policy.b.json > comparison.json
       - run: node tests/measure.mjs
+      - run: node tests/measure-editing.mjs

@@ -67,8 +67,10 @@ demo 的側欄 preset 透過 URL 建立新 session，重設閱讀位置但保留
 
 ## 開發與相容性
 
-`npm run verify` = lint＋格式＋strict typecheck＋corpus 再生檢查＋125 測試。`npm run build` 清理並重新生成 dist；`npm start` 先 build 再啟動 demo。CI 另檢查提交的 dist 與重建結果一致。新增引擎行為後更新 implementationVersion、測資、契約與 review，不把測試通過當真人理解證據。
+`npm run verify` = lint＋格式＋strict typecheck＋corpus 再生檢查＋行為／型別／主題／壓力測試。`npm run build` 清理並重新生成 dist；`npm start` 先 build 再啟動 demo。CI 另檢查提交的 dist 與重建結果一致。新增引擎行為後更新 implementationVersion、測資、契約與 review，不把測試通過當真人理解證據。
 
 v0.1 → v0.2：移除手寫 src/*.mjs 入口，改用 package exports 或 dist/reference/index.js；比較 record 的中文 reason 改為 reasonCode，文案由 src/presentation/changes.ts 的 changeReason 產生；verification 是結構化分類。report 及其內部資料現在深凍結，UI 必須建立局部 projection，不可直接改 rows。增加 provenance。compareSnapshots 與 createComparisonController 的使用方式保留，可額外注入 engine；純 createController 接受 compare port。dist/compare.js 等少數舊 demo 入口仍生成相容 re-export，不應作為新的深層 API 依賴。
 
 readonly 及 lint 無法證明任意 handler 的語意正確性。不要把外部提供的 JS 當不可信 plugin 執行，也不能以關閉下載代替 server 授權。公司 registry、資產歷史、ID 保存交易、React 整合與真人價值仍是待驗證 gate。
+
+最新編輯壓力、ID持久化方案與dark mode限制見 [STRESS-REVIEW.md](STRESS-REVIEW.md)。主題為純呈現偏好，以CSS tokens及prefers-color-scheme控制，不加入引擎policy。

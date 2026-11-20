@@ -46,3 +46,7 @@
 6. Go／Adjust／Stop，以及每個未通過gate的原因、所需證據與下一個最小步驟。只有代表性真人任務能支持更好理解／更快的價值主張。
 
 不要將公司來源、文件、tokens或權限資料上傳到此公開repo。公司內保存的fixture與證據用公司既有管道管理。
+
+## 最後一輪編輯壓力與身分Gate
+
+必讀 [STRESS-REVIEW.md](STRESS-REVIEW.md)。runtime node key不持久；ID只生成一次並跟保存版本原子提交。須補公司undo/redo、多人協作、跨文件paste、儲存失敗與錯版sidecar證據。不可由本套件的UUID模擬測試宣稱公司plugin已完成。F26/F27同樣列入每次review。

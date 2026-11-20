@@ -1,3 +1,4 @@
+import { stressScenarios } from "./stress.js";
 import { builtinHandlers } from "../handlers/builtins.js";
 import { referenceRendererTypes } from "./engine.js";
 import { calloutHandler, calloutScenario } from "./callout.js";
@@ -6,6 +7,13 @@ import { mountComparison } from "../ui/app.js";
 import { createReferenceEngine } from "./engine.js";
 import { presets } from "../core/policy.js";
 import { scenarios, defaultScenario } from "./scenarios.js";
+
+const theme = document.querySelector<HTMLSelectElement>("#theme");
+if (theme)
+  theme.onchange = () => {
+    if (theme.value === "system") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = theme.value;
+  };
 
 // Demo composition only. Product flags/authorization belong to the host, never URL input.
 const requested =
@@ -43,7 +51,7 @@ if (!Object.hasOwn(presets, requested)) {
   };
   toolbar?.append(label, select);
   const dispose = mountComparison({
-    scenarios: [...scenarios, calloutScenario],
+    scenarios: [...scenarios, ...stressScenarios, calloutScenario],
     defaultScenario,
     renderers: { callout: calloutRenderer },
     engine: createReferenceEngine({

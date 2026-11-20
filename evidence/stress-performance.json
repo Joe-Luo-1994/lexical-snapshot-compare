@@ -1,0 +1,36 @@
+{
+  "node": "v22.21.1",
+  "iterations": 25,
+  "results": [
+    {
+      "scenario": "stress-insert",
+      "blocksA": 160,
+      "blocksB": 240,
+      "p50": 3.515500000000003,
+      "p95": 4.781600000000012,
+      "max": 4.8125,
+      "budgetP95": 250,
+      "pass": true
+    },
+    {
+      "scenario": "stress-move",
+      "blocksA": 160,
+      "blocksB": 160,
+      "p50": 2.718500000000006,
+      "p95": 3.046199999999999,
+      "max": 3.3019999999999925,
+      "budgetP95": 250,
+      "pass": true
+    },
+    {
+      "scenario": "stress-reorder-only",
+      "blocksA": 160,
+      "blocksB": 160,
+      "p50": 2.721400000000017,
+      "p95": 3.0721000000000345,
+      "max": 3.256399999999985,
+      "budgetP95": 250,
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+[
+  {
+    "renderMs": "59.8",
+    "step": "move-dark",
+    "text": "37 個未變區塊 · 展開上下文\n文件內容\n文字變更\n01\n−「由值班負責人」；−「、回復程序與核准紀錄」；−「必須」 ＋「可以」 · 另有變動\n\n第 118 條：服務 118 上線前須\n刪除：\n由值班負責人核對監控\n刪除：\n、回復程序與核准紀錄。失敗時\n刪除：\n必須\n新增：\n可以回復，證據保留 \n刪除：\n30\n新增：\n7 天。\n\n122 個未變區塊 · 展開上下文\n查看兩份完整文件與原始順序"
+  },
+  {
+    "open": true,
+    "panels": [
+      {
+        "paragraphs": 160,
+        "text": "基準 A · 原內容\n\n第 1 條：服務 001 上線前須由值班負責人核對監控、回復程序與核准紀錄。失敗時必須回復，證據保留 30 天。\n\n第 2 條：服務 002 上線前須由值班負責人核對監控、回復"
+      },
+      {
+        "paragraphs": 160,
+        "text": "目標 B · 新內容\n\n第 1 條：服務 001 上線前須由值班負責人核對監控、回復程序與核准紀錄。失敗時必須回復，證據保留 30 天。\n\n第 2 條：服務 002 上線前須由值班負責人核對監控、回復"
+      }
+    ],
+    "step": "order-expanded"
+  },
+  {
+    "id": "record-new-39",
+    "step": "dark-before-theme",
+    "top": 88.25
+  },
+  {
+    "id": "record-new-39",
+    "step": "light-after-theme",
+    "top": 88.25
+  },
+  {
+    "samples": [
+      {
+        "background": "rgb(23, 61, 55)",
+        "class": "nav-item active",
+        "color": "rgb(133, 213, 196)"
+      },
+      {
+        "background": "rgb(34, 47, 59)",
+        "class": "record-kind ",
+        "color": "rgb(178, 193, 205)"
+      },
+      {
+        "background": "rgb(34, 47, 59)",
+        "class": "block-reason informational",
+        "color": "rgb(178, 193, 205)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label old-label",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label new-label",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(34, 47, 59)",
+        "class": "record-kind ",
+        "color": "rgb(178, 193, 205)"
+      },
+      {
+        "background": "rgb(32, 57, 80)",
+        "class": "cell-old",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(32, 57, 80)",
+        "class": "cell-new",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(32, 57, 80)",
+        "class": "cell-old",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(32, 57, 80)",
+        "class": "cell-new",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(34, 47, 59)",
+        "class": "record-kind ",
+        "color": "rgb(178, 193, 205)"
+      },
+      {
+        "background": "rgb(68, 45, 56)",
+        "class": "diff-del",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(32, 57, 80)",
+        "class": "diff-add",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(68, 45, 56)",
+        "class": "diff-del",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(32, 57, 80)",
+        "class": "diff-add",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(68, 45, 56)",
+        "class": "diff-del",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(32, 57, 80)",
+        "class": "diff-add",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "record-kind warning",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "block-reason ",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label old-label",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label new-label",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "record-kind warning",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "block-reason ",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label old-label",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label new-label",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "record-kind warning",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "block-reason ",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label old-label",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label new-label",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "record-kind warning",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "block-reason ",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label old-label",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label new-label",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(34, 47, 59)",
+        "class": "record-kind ",
+        "color": "rgb(178, 193, 205)"
+      },
+      {
+        "background": "rgb(34, 47, 59)",
+        "class": "block-reason informational",
+        "color": "rgb(178, 193, 205)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label old-label",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label new-label",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(34, 47, 59)",
+        "class": "record-kind ",
+        "color": "rgb(178, 193, 205)"
+      },
+      {
+        "background": "rgb(68, 45, 56)",
+        "class": "diff-del",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(32, 57, 80)",
+        "class": "diff-add",
+        "color": "rgb(165, 206, 255)"
+      },
+      {
+        "background": "rgb(34, 47, 59)",
+        "class": "record-kind ",
+        "color": "rgb(178, 193, 205)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "record-kind warning",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(59, 50, 36)",
+        "class": "block-reason ",
+        "color": "rgb(246, 211, 150)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label old-label",
+        "color": "rgb(255, 181, 196)"
+      },
+      {
+        "background": "rgb(26, 36, 46)",
+        "class": "side-label new-label",
+        "color": "rgb(165, 206, 255)"
+      }
+    ],
+    "step": "dark-computed-colors"
+  },
+  {
+    "scrollWidth": 375,
+    "step": "dark390",
+    "width": 375
+  },
+  {
+    "focus": "record-article-policy-n041",
+    "scrollWidth": 608,
+    "step": "dark200",
+    "width": 608
+  },
+  {
+    "colorScheme": "dark",
+    "explicit": null,
+    "step": "system-theme"
+  }
+]

@@ -35,3 +35,10 @@
 | F25 可攜與持續驗收 | clean checkout npm ci/verify/start；Node22/24 CI；失敗 exit code | 依賴原工作區或私有服務；只有截圖無程式 | GitHub CI、CLI、AGENT-HANDOFF |
 
 以上是**現行能力的驗收界線**，不是宣稱已完成 host 的任選版本 picker、React component、權限系統、資產保存或 custom-node registry。參照 UI 使用預設成對案例；host 可用 controller 接入自選兩個 immutable revisions。
+
+## F26 主題與 F27 編輯壓力（新增必要檢核）
+
+| ID | 可接受 | 不符合 | 證據 |
+| --- | --- | --- | --- |
+| F26 主題 | 明亮／深色／跟隨系統；正文、diff、表格、fallback、焦點可讀；換主題不重建或改位置 | 只反轉顏色、白底殘留、刪除標記消失、回到頂端；以主題選項當功能授權 | theme.test.mjs＋實際畫面與縮放；OS主題變更事件需host驗證 |
+| F27 編輯壓力 | 插入不冒充搬移；順序與內容分開；拷貝新ID；重複文字／拆合／刪光／Unicode不漏；錯誤身份降級 | 每次保存重生ID；按位置補配對；純重排宣稱沒有任何變更；看不見搬移中的規則修改 | editing-stress.test.mjs、identity.test.mjs、STRESS-REVIEW.md；有效但錯配的sidecar仍須host交易保證 |
