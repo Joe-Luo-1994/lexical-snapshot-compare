@@ -28,6 +28,8 @@ const typeName = {
     root: "文件",
 };
 export function navigationLabel(r) {
+    if (r.reasonCode === "IDENTITY_REBUILT")
+        return `未配對內容 · 基準 ${r.a?.children?.length || 0} 區塊／目標 ${r.b?.children?.length || 0} 區塊`;
     const n = r.b || r.a, subject = n?.title ||
         n?.caption ||
         n?.alt ||
@@ -110,6 +112,7 @@ const reasons = {
     MERMAID_UNVERIFIED: "流程來源已變動；此工具未驗證圖形語意，請核對來源。",
     ROOT_CHANGED: "文件層級設定已改變，請核對完整保存資料與內容。",
     ROOT_UNKNOWN: "文件層級資料尚未支援，請核對完整前後內容。",
+    IDENTITY_REBUILT: "區塊身分已中斷，剩餘內容無法唯一對應。以下僅按各版原始順序列出待核對部分；左右段落不代表逐段配對，未提供逐字差異。請核對完整句意，也可展開完整文件查看位置。",
     IDENTITY_MISSING: "區塊缺少唯一且穩定的識別資料，無法可靠配對；請核對完整前後內容。",
     PRECISION_DISABLED: "目前設定採整區核對；表格變動仍保留，請閱讀完整前後表格。",
     RENDERER_UNAVAILABLE: "此內容尚無可用的安全呈現方式；請核對完整保存資料。",

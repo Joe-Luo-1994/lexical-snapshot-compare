@@ -74,3 +74,7 @@ v0.1 → v0.2：移除手寫 src/*.mjs 入口，改用 package exports 或 dist/
 readonly 及 lint 無法證明任意 handler 的語意正確性。不要把外部提供的 JS 當不可信 plugin 執行，也不能以關閉下載代替 server 授權。公司 registry、資產歷史、ID 保存交易、React 整合與真人價值仍是待驗證 gate。
 
 最新編輯壓力、ID持久化方案與dark mode限制見 [STRESS-REVIEW.md](STRESS-REVIEW.md)。主題為純呈現偏好，以CSS tokens及prefers-color-scheme控制，不加入引擎policy。
+
+## v0.3 配對擴充
+
+`src/core/pairing.ts`負責完整內容鍵與全文件唯一對應；`engine.ts`組合ID優先、內容對應與未配對區域，`presentation/changes.ts`產生降級原因。不得替換成文字／位置模糊配對。新增metadata與API語意見INTEGRATION，P1–P4與本輪證據見[PASTE-REVIEW.md](PASTE-REVIEW.md)。引擎與package版本同步為0.3.0。

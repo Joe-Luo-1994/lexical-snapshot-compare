@@ -74,3 +74,15 @@ ID規則：新區塊與貼上的副本取新ID；內容修改保留；拆分保�
 ## TypeScript 與能力注入
 
 v0.2 的型別、集中設定、handler／renderer 範例、API 遷移說明見 [MAINTENANCE.md](MAINTENANCE.md)。先 build 再用 package exports，禁止依賴已刪除的 src/*.mjs。UI 參考程式只讀 demo 的比較投影；正式產品須將 compareSnapshots 的 diagnostics、runtime 狀態與原始 snapshots 一起接入，不能跳過 runtime adapter。
+
+## v0.3 身分中斷的比較結果
+
+共同持久ID仍優先。兩側ID皆有效但沒有共同ID、完整內容和順序相同時，可得到 `pairing.mode = content-equal`；只證明保存內容相同，未知／媒體仍有各自verification。其他情況僅對兩側完整頂層列表都唯一、所有序列化欄位（只忽略node blockId）完全相同的未配對區塊建立內容對應。不是文字相似度、不是位置推測、也不是新的持久ID。
+
+report新增可選 `pairing`：mode（content-equal / content-anchors / unresolved）、exactMatches、unresolvedA/B、contentOrderChanged。record新增可選 `pairingBasis`（stable-id / exact-content / document-content / unpaired）。沒有pairing不代表全部內容都精準，仍須看原verification。
+
+兩側剩餘內容無法逐段對應時，合成一筆 `IDENTITY_REBUILT`／pairing結果，a/b各保存該側剩餘區塊的原始順序，不冒充逐段diff；使用者可回到完整文件看位置。changed項目數包含整區核對，不能當精確編輯段落數。單側剩餘則保留新增／刪除內容。`moved`仍限定共同持久ID的相對順序；內容對應的順序改變另看contentOrderChanged，不推定歷史操作。
+
+若只保留部分共同ID、剩餘沒有任何完全相同的內容錨點，目前維持按ID的新增／刪除呈現，不猜哪個刪除被哪個新增取代。缺ID或重複ID仍整份fallback；跨namespace仍拒絕。UI必須呈現pairing提示、兩側數量與完整內容入口，不能只消費records後宣告全部精準。
+
+示範四情境提供原生 `savedA/savedB`（可下載），真正0.18解析檢查ready；`a/b`是已帶身分的比較投影。fixture sidecar由已知合成編輯生命週期重建，不能把這段code當正式產品用位置生成跨版ID的方法。

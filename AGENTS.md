@@ -5,7 +5,7 @@ For extension, flags or TypeScript migration, also read docs/EXTENSION-CONTRACT.
 Read README.md, docs/AGENT-HANDOFF.md, docs/INTEGRATION.md, docs/ACCEPTANCE.md, and docs/FEATURE-CHECKLIST.md before adoption or behavioral changes.
 
 - Stored Lexical 0.18 JSON is canonical; no upgrade, HTML intermediate, or Markdown round-trip assumption.
-- Never infer persistent identity from runtime keys, current array position, or mutable text. Corpus sidecars belong to a controlled edit lineage, not an identity matching algorithm.
+- Never infer persistent identity from runtime keys, current array position, or mutable text. Corpus sidecars belong to a controlled edit lineage, not an identity matching algorithm. v0.3 permits exact full-content correspondence as explicitly labelled evidence, never inferred identity; read docs/PASTE-REVIEW.md and acceptance P1–P4. No fuzzy or positional matching.
 - Keep original snapshots; runtime re-export is diagnostic evidence, never a sanitizer that silently drops unknown fields.
 - Unknown schemas, renderer gaps, asset history gaps, and failed parsing must remain visible. No false precision.
 - Verify existing functionality using the feature checklist and all27 acceptance standards. Unit tests do not substitute for browser evidence or human/host validation.

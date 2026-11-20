@@ -50,3 +50,7 @@
 ## 最後一輪編輯壓力與身分Gate
 
 必讀 [STRESS-REVIEW.md](STRESS-REVIEW.md)。runtime node key不持久；ID只生成一次並跟保存版本原子提交。須補公司undo/redo、多人協作、跨文件paste、儲存失敗與錯版sidecar證據。不可由本套件的UUID模擬測試宣稱公司plugin已完成。F26/F27同樣列入每次review。
+
+## v0.3 接手補充
+
+先讀[PASTE-REVIEW.md](PASTE-REVIEW.md)：ID不是唯一比較依據，但完整內容對應不等於身分延續。host UI須呈現pairing／pairingBasis與降級範圍，依P1–P4及F28驗收。不要把歷史STRESS-REVIEW的「ID全換必定全刪新增」當現行契約。

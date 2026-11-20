@@ -64,7 +64,7 @@ export interface EffectivePolicy extends Policy {
     readonly id: string;
     readonly notices: readonly string[];
 }
-export declare const reasonCodes: readonly ["NONE", "UNKNOWN_CONTENT", "MEDIA_UNVERIFIED", "STRUCTURE_CHANGED", "TABLE_STRUCTURE", "FORMAT_CHANGED", "LINK_CHANGED", "WHOLE_BLOCK", "COLLAPSE_CHANGED", "MERMAID_UNVERIFIED", "ROOT_CHANGED", "ROOT_UNKNOWN", "IDENTITY_MISSING", "PRECISION_DISABLED", "RENDERER_UNAVAILABLE", "HANDLER_FAILED"];
+export declare const reasonCodes: readonly ["NONE", "UNKNOWN_CONTENT", "MEDIA_UNVERIFIED", "STRUCTURE_CHANGED", "TABLE_STRUCTURE", "FORMAT_CHANGED", "LINK_CHANGED", "WHOLE_BLOCK", "COLLAPSE_CHANGED", "MERMAID_UNVERIFIED", "ROOT_CHANGED", "ROOT_UNKNOWN", "IDENTITY_MISSING", "IDENTITY_REBUILT", "PRECISION_DISABLED", "RENDERER_UNAVAILABLE", "HANDLER_FAILED"];
 export type ReasonCode = (typeof reasonCodes)[number];
 export type Verification = "whole" | "media" | "unsupported" | "pairing";
 export interface CellChange {
@@ -94,12 +94,21 @@ export type Finding = FindingBase & ({
     readonly rows?: never;
 });
 export type ChangeRecord = Finding & {
+    readonly pairingBasis?: "stable-id" | "exact-content" | "document-content" | "unpaired";
     readonly id: string;
     readonly a: SavedNode | null;
     readonly b: SavedNode | null;
     readonly section: string;
 };
+export interface PairingEvidence {
+    readonly mode: "content-equal" | "content-anchors" | "unresolved";
+    readonly exactMatches: number;
+    readonly unresolvedA: number;
+    readonly unresolvedB: number;
+    readonly contentOrderChanged: boolean;
+}
 export interface ComparisonReport {
+    readonly pairing?: PairingEvidence;
     readonly records: readonly ChangeRecord[];
     readonly moved: boolean;
     readonly provenance: {

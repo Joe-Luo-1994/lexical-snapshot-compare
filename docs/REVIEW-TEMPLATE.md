@@ -10,7 +10,7 @@
 - 畫面環境（viewport／縮放／瀏覽器）：
 - 本輪總判定：本階段通過／需修改／證據不足
 - 擴充／設定契約X1–X8逐項狀態、lint反例與行為／畫面證據（見EXTENSION-CONTRACT.md）：
-- [FEATURE-CHECKLIST.md](FEATURE-CHECKLIST.md) F01–F27逐項結果／受影響項／沿用證據理由：
+- [FEATURE-CHECKLIST.md](FEATURE-CHECKLIST.md) F01–F28逐項結果／受影響項／沿用證據理由：
 - 真正Lexical runtime／原始JSON／來源授權與受控修訂答案：
 
 ## 證據與標準
@@ -83,3 +83,5 @@
 - 延後驗證項目、原因、應在哪一階段補齊：
 - 已知反例與不能宣稱的能力：
 - 下一次只需補充或重跑哪些證據：
+
+配對改動另記錄ACCEPTANCE第8節P1–P4、每項pairingBasis與降級提示；內容對應不得冒充身分或搬移證據。

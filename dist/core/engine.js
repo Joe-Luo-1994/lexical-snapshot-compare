@@ -1,5 +1,6 @@
 import { reasonCodes } from "../contracts/model.js";
 import { contentKey, identity, plain, shallow, validate } from "./data.js";
+import { exactNodeKey, recoverContentPairs } from "./pairing.js";
 import { resolvePolicy } from "./policy.js";
 export function freeze(value) {
     if (value && typeof value === "object" && !Object.isFrozen(value)) {
@@ -121,7 +122,7 @@ export function createEngine(options) {
         validate(right);
         const ar = freeze(structuredClone(validate(left))), br = freeze(structuredClone(validate(right)));
         const provenance = {
-            engine: "snapshot-compare/0.2.0",
+            engine: "snapshot-compare/0.3.0",
             handlers: [...registry.values()]
                 .map((h) => `${h.type}@${h.nodeVersion}:${h.implementationVersion}`)
                 .sort(),
@@ -150,10 +151,83 @@ export function createEngine(options) {
         const am = new Map(a.map((n) => [n.blockId, n])), bm = new Map(b.map((n) => [n.blockId, n]));
         const ca = a.filter((n) => bm.has(n.blockId)).map((n) => n.blockId), cb = b.filter((n) => am.has(n.blockId)).map((n) => n.blockId);
         const moved = JSON.stringify(ca) !== JSON.stringify(cb);
-        const order = b.map((n) => n.blockId);
+        let pairing;
+        let unresolved;
+        const recovered = ca.length < a.length && cb.length < b.length
+            ? recoverContentPairs(a, b)
+            : [];
+        // Equality is a statement about saved content, never evidence of node lineage.
+        if (!ca.length &&
+            a.length &&
+            b.length &&
+            exactNodeKey(ar) === exactNodeKey(br)) {
+            return freeze({
+                records: [
+                    {
+                        id: "document",
+                        a: ar,
+                        b: br,
+                        section: "完整保存內容",
+                        pairingBasis: "document-content",
+                        ...classify(ar, br),
+                    },
+                ],
+                moved: false,
+                provenance,
+                pairing: {
+                    mode: "content-equal",
+                    exactMatches: a.length,
+                    unresolvedA: 0,
+                    unresolvedB: 0,
+                    contentOrderChanged: false,
+                },
+            });
+        }
+        const bKeys = new Map(b.map((n) => [n.blockId, n.blockId]));
+        if (recovered.length || (!ca.length && a.length && b.length)) {
+            for (const [x, y] of recovered) {
+                bm.delete(y.blockId);
+                bm.set(x.blockId, y);
+                bKeys.set(y.blockId, x.blockId);
+            }
+            const leftOver = a.filter((n) => !bm.has(n.blockId));
+            const rightOver = b.filter((n) => !am.has(bKeys.get(n.blockId)));
+            const before = a.filter((n) => bm.has(n.blockId)).map((n) => n.blockId);
+            const after = b
+                .filter((n) => am.has(bKeys.get(n.blockId)))
+                .map((n) => bKeys.get(n.blockId));
+            pairing = {
+                mode: recovered.length ? "content-anchors" : "unresolved",
+                exactMatches: recovered.length,
+                unresolvedA: leftOver.length,
+                unresolvedB: rightOver.length,
+                contentOrderChanged: JSON.stringify(before) !== JSON.stringify(after),
+            };
+            if (leftOver.length && rightOver.length) {
+                let id = "unpaired-content";
+                while (am.has(id) || bm.has(id))
+                    id += "-";
+                unresolved = {
+                    id,
+                    a: { ...ar, children: leftOver },
+                    b: { ...br, children: rightOver },
+                    section: "未配對內容 · 各版原始順序",
+                    pairingBasis: "unpaired",
+                    ...fallback(exactNodeKey({ ...ar, children: leftOver }) !==
+                        exactNodeKey({ ...br, children: rightOver }), "IDENTITY_REBUILT", "pairing"),
+                };
+                for (const n of leftOver)
+                    am.delete(n.blockId);
+                for (const n of rightOver)
+                    bm.delete(bKeys.get(n.blockId));
+            }
+        }
+        const order = b
+            .map((n) => bKeys.get(n.blockId))
+            .filter((id) => bm.has(id));
         for (let i = 0; i < a.length; i++) {
             const id = a[i].blockId;
-            if (bm.has(id))
+            if (bm.has(id) || !am.has(id))
                 continue;
             let previous = i - 1;
             while (previous >= 0 && !order.includes(a[previous].blockId))
@@ -166,9 +240,29 @@ export function createEngine(options) {
             const x = am.get(id) || null, y = bm.get(id) || null;
             if ((y || x).type === "heading")
                 section = plain(y || x);
-            records.push({ id, a: x, b: y, section, ...classify(x, y) });
+            records.push({
+                id,
+                a: x,
+                b: y,
+                section,
+                ...(x && y
+                    ? {
+                        pairingBasis: x.blockId === y.blockId
+                            ? "stable-id"
+                            : "exact-content",
+                    }
+                    : {}),
+                ...classify(x, y),
+            });
         }
-        return freeze({ records, moved, provenance });
+        if (unresolved)
+            records.push(unresolved);
+        return freeze({
+            records,
+            moved,
+            provenance,
+            ...(pairing ? { pairing } : {}),
+        });
     }
     return Object.freeze({
         policy,

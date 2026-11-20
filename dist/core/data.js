@@ -18,9 +18,9 @@ export function canonical(x) {
             "}");
     return JSON.stringify(x) ?? "undefined";
 }
-export function contentKey(n) {
+function normalizedContent(n) {
     if (!n || typeof n !== "object")
-        return canonical(n);
+        return n;
     const c = {};
     for (const [k, v] of Object.entries(n)) {
         if (k === "blockId")
@@ -39,12 +39,15 @@ export function contentKey(n) {
                 else
                     merged.push({ ...child });
             }
-            c[k] = merged.map(contentKey);
+            c[k] = merged.map(normalizedContent);
         }
         else
             c[k] = v;
     }
-    return canonical(c);
+    return c;
+}
+export function contentKey(n) {
+    return canonical(normalizedContent(n));
 }
 export function plain(n) {
     if (!n)

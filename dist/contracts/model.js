@@ -12,6 +12,7 @@ export const reasonCodes = [
     "ROOT_CHANGED",
     "ROOT_UNKNOWN",
     "IDENTITY_MISSING",
+    "IDENTITY_REBUILT",
     "PRECISION_DISABLED",
     "RENDERER_UNAVAILABLE",
     "HANDLER_FAILED",

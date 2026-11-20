@@ -29,7 +29,7 @@ test('copy versus move: new identity is addition; same identity changes order',(
 });
 test('complete deletion and replacement preserve every old block in both directions',()=>{
  const a=Array.from({length:500},(_,i)=>p('old'+i,'規範'+i)),b=Array.from({length:500},(_,i)=>p('new'+i,'新規範'+i));
- for(const [x,y] of [[a,[]],[a,b],[b,a]]){const r=compare(doc(x),doc(y));assert.equal(r.records.filter(n=>n.kind==='removed').length,x.length);assert.equal(r.records.filter(n=>n.kind==='added').length,y.length);assert.equal(r.moved,false);}
+ for(const [x,y] of [[a,[]],[a,b],[b,a]]){const r=compare(doc(x),doc(y));if(y.length){assert.equal(r.records.length,1);assert.equal(r.records[0].reasonCode,'IDENTITY_REBUILT');assert.deepEqual(r.records[0].a.children,x);assert.deepEqual(r.records[0].b.children,y);}else{assert.equal(r.records.filter(n=>n.kind==='removed').length,x.length);}assert.equal(r.moved,false);}
 });
 test('lost or duplicated identities after mass insertion fail closed',()=>{
  for(const damage of [ns=>delete ns[100].blockId,ns=>ns[100].blockId=ns[0].blockId]){

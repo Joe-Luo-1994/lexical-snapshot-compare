@@ -257,9 +257,26 @@ export function mountComparison({ scenarios, defaultScenario, engine, renderers 
                 .join(" ");
             $("#status").append(notice);
         }
+        if (result.pairing) {
+            const p = result.pairing;
+            const notice = warning(p.mode === "content-equal"
+                ? "身分已重建：忽略區塊 ID 後，完整保存內容與順序相同。這只確認內容相同，不代表同一批區塊延續；媒體與未支援內容仍依各區域提示核對。"
+                : `配對已降級：${p.exactMatches} 個區塊以唯一且完全相同的保存內容建立對應；不代表身分延續。剩餘基準 ${p.unresolvedA} 個、目標 ${p.unresolvedB} 個區塊${p.unresolvedA && p.unresolvedB ? "未能逐段配對，集中於「未配對內容」核對，未提供逐字差異" : "僅存在於其中一版，保留新增／刪除內容"}。${p.contentOrderChanged ? "內容對應的排列也不同，請展開完整文件核對順序。" : ""}`);
+            if (p.mode === "content-equal")
+                notice.classList.add("policy-notice");
+            const show = el("button", "", "查看完整文件與順序");
+            show.onclick = () => {
+                const full = $("#full-order");
+                full.open = true;
+                full.scrollIntoView({ block: "start" });
+                full.querySelector("summary")?.focus();
+            };
+            notice.lastElementChild.append(document.createElement("br"), show);
+            $("#status").append(notice);
+        }
         const changed = result.records.filter((r) => r.changed), unverified = result.records.filter((r) => r.needsReview || ["coarse", "unverified"].includes(r.kind));
         const summary = el("div", "status-summary");
-        summary.append(el("strong", "", `${changed.length} 個內容變動區塊`), el("span", "status-separator", "/"), el("span", "", `${unverified.length + (result.moved ? 1 : 0)} 個區域需要核對`));
+        summary.append(el("strong", "", `${changed.length} 個內容變動${result.records.some((r) => r.reasonCode === "IDENTITY_REBUILT") ? "項目（含整區核對）" : "區塊"}`), el("span", "status-separator", "/"), el("span", "", `${unverified.length + (result.moved || result.pairing?.contentOrderChanged ? 1 : 0)} 個區域需要核對`));
         $("#status").append(summary);
         if (unverified.length) {
             const list = el("div", "verification-summary");
@@ -293,13 +310,18 @@ export function mountComparison({ scenarios, defaultScenario, engine, renderers 
                 context = [];
             }
         }
-        if (!changed.length && !unverified.length && !result.moved) {
+        if (!changed.length &&
+            !unverified.length &&
+            !result.moved &&
+            !result.pairing?.contentOrderChanged) {
             const empty = el("div", "empty-state");
             empty.append(el("span", "empty-symbol", "✓"), el("h2", "", "這兩版沒有內容變更"), el("p", "", "已比較此原型支援的保存內容。你仍可展開完整文件確認。"));
             $("#document").append(empty);
         }
         for (const r of result.records) {
             if (r.kind === "same") {
+                if (result.pairing?.mode === "content-equal")
+                    continue;
                 context.push(r);
                 continue;
             }

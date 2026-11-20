@@ -1,3 +1,4 @@
+import { pasteScenarios } from "./paste.js";
 import { stressScenarios } from "./stress.js";
 import { builtinHandlers } from "../handlers/builtins.js";
 import { referenceRendererTypes } from "./engine.js";
@@ -51,7 +52,12 @@ else {
     };
     toolbar?.append(label, select);
     const dispose = mountComparison({
-        scenarios: [...scenarios, ...stressScenarios, calloutScenario],
+        scenarios: [
+            ...scenarios,
+            ...stressScenarios,
+            ...pasteScenarios,
+            calloutScenario,
+        ],
         defaultScenario,
         renderers: { callout: calloutRenderer },
         engine: createReferenceEngine({

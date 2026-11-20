@@ -28,8 +28,8 @@ export function canonical(x: unknown): string {
     );
   return JSON.stringify(x) ?? "undefined";
 }
-export function contentKey(n: SavedNode | null): string {
-  if (!n || typeof n !== "object") return canonical(n);
+function normalizedContent(n: SavedNode | null): unknown {
+  if (!n || typeof n !== "object") return n;
   const c: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(n)) {
     if (k === "blockId") continue;
@@ -48,10 +48,13 @@ export function contentKey(n: SavedNode | null): string {
           };
         else merged.push({ ...child });
       }
-      c[k] = merged.map(contentKey);
+      c[k] = merged.map(normalizedContent);
     } else c[k] = v;
   }
-  return canonical(c);
+  return c;
+}
+export function contentKey(n: SavedNode | null): string {
+  return canonical(normalizedContent(n));
 }
 export function plain(n: SavedNode | null | undefined): string {
   if (!n) return "";
