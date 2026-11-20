@@ -27,6 +27,32 @@ const typeName = {
     collapse: "收合內容",
     root: "文件",
 };
+// A reading heuristic, never a pairing rule or a claim about semantic similarity.
+// Short edits retain exact highlights. Long rewrites expose complete A/B first.
+export function preferWholeText(r) {
+    if (r.kind !== "text")
+        return false;
+    const a = plain(r.a), b = plain(r.b);
+    const size = Math.max(Array.from(a).length, Array.from(b).length);
+    if (size < 80)
+        return false;
+    // The bounded token diff can return whole strings when its work budget is
+    // exhausted. A long unchanged prefix/suffix must not become a rewrite claim.
+    const left = Array.from(a), right = Array.from(b);
+    let prefix = 0, suffix = 0;
+    while (prefix < Math.min(left.length, right.length) &&
+        left[prefix] === right[prefix])
+        prefix++;
+    while (suffix < Math.min(left.length, right.length) - prefix &&
+        left[left.length - 1 - suffix] === right[right.length - 1 - suffix])
+        suffix++;
+    if ((prefix + suffix) / size >= 0.35)
+        return false;
+    const unchanged = tokens(a, b)
+        .filter((p) => p.type === "same")
+        .reduce((sum, p) => sum + Array.from(p.text).length, 0);
+    return unchanged / size < 0.35;
+}
 export function navigationLabel(r) {
     if (r.reasonCode === "IDENTITY_REBUILT")
         return `未配對內容 · 基準 ${r.a?.children?.length || 0} 區塊／目標 ${r.b?.children?.length || 0} 區塊`;
@@ -38,6 +64,8 @@ export function navigationLabel(r) {
         n?.type ||
         "內容";
     if (r.kind === "text") {
+        if (preferWholeText(r))
+            return `大幅改寫 · 原「${clip(plain(r.a), 24)}」／新「${clip(plain(r.b), 32)}」`;
         const groups = [];
         let group = [];
         for (const p of tokens(plain(r.a), plain(r.b))) {

@@ -22,6 +22,7 @@ import {
   linkChangeName,
   changeReason,
   policyNotices,
+  preferWholeText,
 } from "../presentation/changes.js";
 import { readingMemory } from "./reading.js";
 import type { ReadingCapture } from "./reading.js";
@@ -158,7 +159,7 @@ export function mountComparison({
             : "second";
       cell.append(el("span", `side-label ${side}-label`, label));
       const content = el("div", "prose");
-      if (record.kind === "text") {
+      if (record.kind === "text" && !preferWholeText(record)) {
         const line = el("p");
         for (const part of tokens(plain(record.a), plain(record.b))) {
           if (
@@ -287,7 +288,25 @@ export function mountComparison({
           ),
         };
     }
-    if (mode === "flow" && r.kind === "text")
+    if (preferWholeText(r)) {
+      section.append(
+        el(
+          "p",
+          "block-reason informational",
+          "此段大幅改寫，先完整閱讀前後內容。區塊配對仍有效；僅收起零碎逐字標記，可展開查證。",
+        ),
+      );
+      const complete = pair(r);
+      if (mode === "flow") complete.classList.add("rewrite-stack");
+      section.append(complete);
+      const detail = el("details", "rewrite-detail");
+      detail.dataset.viewKey = "rewrite|" + r.id;
+      detail.append(
+        el("summary", "", "查看逐字標記（可能較零碎）"),
+        diff(plain(r.a), plain(r.b), r.b?.children?.[0]?.format),
+      );
+      section.append(detail);
+    } else if (mode === "flow" && r.kind === "text")
       section.append(diff(plain(r.a), plain(r.b), r.b?.children?.[0]?.format));
     else if (mode === "flow" && r.kind === "table")
       section.append(tableDiff(r));

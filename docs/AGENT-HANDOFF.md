@@ -54,3 +54,5 @@
 ## v0.3 接手補充
 
 先讀[PASTE-REVIEW.md](PASTE-REVIEW.md)：ID不是唯一比較依據，但完整內容對應不等於身分延續。host UI須呈現pairing／pairingBasis與降級範圍，依P1–P4及F28驗收。不要把歷史STRESS-REVIEW的「ID全換必定全刪新增」當現行契約。
+
+最新密集改寫及呈現啟發式請讀[BLUEPRINT-REVIEW.md](BLUEPRINT-REVIEW.md)，重跑blueprint測試與F29。勿將35%閱讀閾值用於身分配對。

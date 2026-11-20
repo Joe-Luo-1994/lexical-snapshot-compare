@@ -1,0 +1,32 @@
+{
+  "node": "v22.21.1",
+  "iterations": 25,
+  "results": [
+    {
+      "scenario": "blueprint",
+      "blocksA": 96,
+      "blocksB": 96,
+      "changedBlocks": 48,
+      "charactersA": 1506,
+      "charactersB": 6071,
+      "p50": 1.8793000000000006,
+      "p95": 2.436700000000002,
+      "max": 2.7220999999999975,
+      "budgetP95": 250,
+      "pass": true
+    },
+    {
+      "scenario": "blueprint-pasted",
+      "blocksA": 96,
+      "blocksB": 96,
+      "changedBlocks": 48,
+      "charactersA": 1506,
+      "charactersB": 6071,
+      "p50": 2.793200000000013,
+      "p95": 3.2110000000000127,
+      "max": 3.355499999999992,
+      "budgetP95": 250,
+      "pass": true
+    }
+  ]
+}

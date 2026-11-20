@@ -1,7 +1,12 @@
-import type { ChangeRecord } from "../contracts/model.js";
+import type { ChangeRecord, SavedNode } from "../contracts/model.js";
 export { plain, tokens } from "../core/data.js";
 export declare function linkDestinationChanged(r: ChangeRecord): boolean;
 export declare function linkChangeName(r: ChangeRecord): "連結目的地變更" | "含連結段落變更";
+export declare function preferWholeText(r: {
+    readonly kind?: string;
+    readonly a: SavedNode | null;
+    readonly b: SavedNode | null;
+}): boolean;
 export declare function navigationLabel(r: ChangeRecord): string;
 export declare const verificationCategories: {
     whole: {

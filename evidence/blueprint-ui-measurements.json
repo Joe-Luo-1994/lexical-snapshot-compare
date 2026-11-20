@@ -1,0 +1,78 @@
+[
+  {
+    "case": "blueprint-flow",
+    "height": 1274,
+    "nav": 48,
+    "overflow": false,
+    "renderMs": "113.8",
+    "status": "48 個內容變動區塊/0 個區域需要核對",
+    "whole": 48,
+    "width": 1232
+  },
+  {
+    "case": "blueprint-split-position",
+    "opened": true,
+    "overflow": false,
+    "renderMs": "209.7",
+    "top": 88.29167175292969
+  },
+  {
+    "a": "工作 metadata 與投遞結果保留 30 天，敏感錯誤片段保留 7 天；內容仍遵循文件本身的存取與保存政策。稽核事件記錄發起、取消、人工重送與權限拒絕。保存 metadata 不代表歷史全文永遠可下載，兩者在畫面分別說明。",
+    "b": "工作與 log 保留 7 天。",
+    "case": "blueprint-swapped",
+    "opened": true,
+    "top": 87.66667175292969
+  },
+  {
+    "case": "blueprint-pasted",
+    "nav": 1,
+    "overflow": false,
+    "reason": "區塊身分已中斷，剩餘內容無法唯一對應。以下僅按各版原始順序列出待核對部分；左右段落不代表逐段配對，未提供逐字差異。請核對完整句意，也可展開完整文件查看位置。",
+    "renderMs": "57.6",
+    "status": "!配對已降級：48 個區塊以唯一且完全相同的保存內容建立對應；不代表身分延續。剩餘基準 48 個、目標 48 個區塊未能逐段配對，集中於「未配對內容」核對，未提供逐字差異。查看完整文件與順序1 個內容變動項目（含整區核對）/1 個區域需要核對未能可靠配對 · 1區塊身分不足，無法可靠指出哪一段對應哪一段。"
+  },
+  {
+    "case": "blueprint-narrow",
+    "height": 844,
+    "overflow": false,
+    "renderMs": "126.0",
+    "top": 196.0416717529297,
+    "width": 390
+  },
+  {
+    "case": "blueprint-200-percent",
+    "dpr": 3,
+    "height": 613,
+    "overflow": false,
+    "top": 88.890625,
+    "width": 616
+  },
+  {
+    "case": "article-tech-regression",
+    "overflow": false,
+    "precise": "Define a liveness command文字變更03−「30」 ＋「90」Within 刪除：30新增：90 seconds, view the Pod events:",
+    "renderMs": "64.8",
+    "status": "4 個內容變動區塊/3 個區域需要核對整區核對 · 3已知資料有變動，尚無可靠的逐項對應。"
+  },
+  {
+    "case": "release-regression",
+    "nav": 11,
+    "overflow": false,
+    "renderMs": "251.5",
+    "status": "11 個內容變動區塊/5 個區域需要核對整區核對 · 2已知資料有變動，尚無可靠的逐項對應。媒體／流程待驗證 · 2只能比較保存資料，尚未確認媒體內容或流程語意。尚未支援 · 1有尚未支援的欄位或內容，請核對完整保存資料。"
+  },
+  {
+    "case": "article-policy-regression",
+    "nav": "變更導覽01資料變動 · 在行為準則調查中故意提供虛假或誤導性資訊，或以其他方式故意干預調查。我們的標準 · 整區核對02含連結段落變更 · −「三」 ＋「十」個回報 · 含連結段落變更03連結目的地變更 · 如需進一步瞭解本行為準則，請參閱 CNCF 行為準則常見…常見問題 · 連結目的地變更04−「必須獲」；−「技術監督委員會的批」 ＋「由專案維護者自行核」修訂 · 文字變更",
+    "overflow": false,
+    "renderMs": "49.5",
+    "status": "4 個內容變動區塊/1 個區域需要核對整區核對 · 1已知資料有變動，尚無可靠的逐項對應。"
+  },
+  {
+    "case": "blueprint-final",
+    "nav": 48,
+    "overflow": false,
+    "renderMs": "136.5",
+    "whole": 48
+  }
+]

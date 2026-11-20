@@ -1,4 +1,5 @@
 import { pasteScenarios } from "./paste.js";
+import { blueprintScenarios } from "./blueprint.js";
 import { stressScenarios } from "./stress.js";
 import { builtinHandlers } from "../handlers/builtins.js";
 import { referenceRendererTypes } from "./engine.js";
@@ -56,6 +57,7 @@ else {
             ...scenarios,
             ...stressScenarios,
             ...pasteScenarios,
+            ...blueprintScenarios,
             calloutScenario,
         ],
         defaultScenario,

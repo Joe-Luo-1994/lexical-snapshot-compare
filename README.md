@@ -75,3 +75,7 @@ CLI exit code：0 runtime檢查就緒、2 輸入／執行失敗、3 部分可讀
 驗證支持的是本套件的行為。正式 Lexical custom-node 相容性、使用者理解／速度、美感感受與權限正確性，需要公司內證據。不得以本套件測試通過代替產品驗收。
 
 擴充與功能開關依 [X1–X8契約](docs/EXTENSION-CONTRACT.md) 驗收；`npm run lint` 已加入 verify 與 CI。目前 v0.2 已完成 strict TypeScript runtime、handler registry、集中 policy resolver；沒有遷移例外。新增節點與功能開關請從 [維護與擴充指南](docs/MAINTENANCE.md) 開始。
+
+## 最新密集改寫驗收
+
+新增24章文件發布規格：48/96區塊穿插改寫、1506→6071字元；另有整頁ID重建版本。開啟 /#blueprint 或 /#blueprint-pasted。大幅改寫先看完整前後，逐字標記仍可展開。[完整驗收與限制](docs/BLUEPRINT-REVIEW.md)。合成案例，非公司規格；真人與host驗證仍未完成。
