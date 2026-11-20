@@ -1,3 +1,5 @@
+> 歷史提案 review；實作結果與後續證據見 [REVIEW-TYPESCRIPT.md](REVIEW-TYPESCRIPT.md)。
+
 # TypeScript 提案 review
 
 日期：2026-11-20；reviewer：實作agent自行review；階段：方案。對象：[TYPESCRIPT-DESIGN](TYPESCRIPT-DESIGN.md)。總判定：**證據不足**（設計已記錄，尚無TS實作／開關操作證據，不能宣稱重構驗收通過）。本輪沒有變更介面或重跑畫面，既有畫面僅作不退步基準；不計為本輪視覺驗收。沒有公司程式存取權。

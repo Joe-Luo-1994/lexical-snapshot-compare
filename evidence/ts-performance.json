@@ -1,0 +1,22 @@
+{
+  "node": "v22.21.1",
+  "scenario": "release",
+  "a": {
+    "nodes": 1181,
+    "chars": 7203,
+    "bytes": 164920,
+    "topLevel": 94
+  },
+  "b": {
+    "nodes": 1176,
+    "chars": 7123,
+    "bytes": 164147,
+    "topLevel": 93
+  },
+  "iterations": 25,
+  "p50": 21.39009999999996,
+  "p95": 23.524500000000018,
+  "max": 25.667100000000005,
+  "budgetP95": 250,
+  "pass": true
+}

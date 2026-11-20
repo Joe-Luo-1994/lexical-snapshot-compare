@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createComparisonController} from '../src/index.mjs';
-import {createReferenceEditor} from '../src/reference-registry.mjs';
+import {createComparisonController} from '../dist/reference/index.js';
+import {createReferenceEditor} from '../dist/reference/registry.js';
 import {readFile} from 'node:fs/promises';
 const a=JSON.parse(await readFile(new URL('../corpus/snapshots/article-policy.a.json',import.meta.url))),b=JSON.parse(await readFile(new URL('../corpus/snapshots/article-policy.b.json',import.meta.url)));
 const pair={documentId:'doc',baselineRevision:'source',targetRevision:'exercise'};

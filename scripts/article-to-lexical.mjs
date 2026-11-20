@@ -8,7 +8,7 @@ import {$createLinkNode} from '@lexical/link';
 import {$createListNode,$createListItemNode} from '@lexical/list';
 import {$createCodeNode} from '@lexical/code';
 import {$createTableNode,$createTableRowNode,$createTableCellNode} from '@lexical/table';
-import {createReferenceEditor} from '../src/reference-registry.mjs';
+import {createReferenceEditor} from '../dist/reference/registry.js';
 
 export function articleToLexical(markdown,baseURL){
  const tree=fromMarkdown(markdown,{extensions:[gfm()],mdastExtensions:[gfmFromMarkdown()]}),warnings=[];

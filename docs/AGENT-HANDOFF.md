@@ -1,6 +1,6 @@
 # 給公司內 Agent 的執行指令
 
-新增node、比較策略、renderer或功能開關時，先讀 [EXTENSION-CONTRACT.md](EXTENSION-CONTRACT.md)，逐項驗收X1–X8；不得以修改lint規則替代處理架構問題。完整TypeScript遷移與policy resolver尚待實作。
+新增node、比較策略、renderer或功能開關時，先讀 [EXTENSION-CONTRACT.md](EXTENSION-CONTRACT.md)，逐項驗收X1–X8；不得以修改lint規則替代處理架構問題。strict TypeScript、集中policy resolver與handler registry已實作；先讀 [MAINTENANCE.md](MAINTENANCE.md) 的擴充演練與 [REVIEW-TYPESCRIPT.md](REVIEW-TYPESCRIPT.md) 的證據界線。
 
 可將下面段落連同 repository 一起交給公司 Agent。不需要重做本套件的探索；先確認產品差異，再完成最小可驗證接入。
 

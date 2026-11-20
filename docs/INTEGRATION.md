@@ -6,12 +6,12 @@
 
 | 所有者 | 入口 | 契約 |
 | --- | --- | --- |
-| 比較核心 | dist/compare.js | 純函式、不寫入輸入；精準文字／連結資料／簡單表格；結構不明退回完整對照 |
-| runtime接入 | src/lexical-adapter.mjs | 真正parseEditorState；保留raw輸入；重新序列化差異列入diagnostics |
+| 比較核心 | src/core/engine.ts | 純函式、不寫入輸入；精準文字／連結資料／簡單表格；結構不明退回完整對照 |
+| runtime接入 | src/adapters/lexical018/runtime.ts | 真正parseEditorState；保留raw輸入；重新序列化差異列入diagnostics |
 | host registry | createEditor(onError) | 每次建立disposable editor；全部真實node版本、factory與onError必須正確接線 |
 | host資料／授權 | loadSnapshot({documentId,revision,signal}) | 回傳這一文件、這一不可變revision的完整JSON；服務端檢查歷史存取權 |
-| 請求競態 | src/controller.mjs | 新請求取消舊signal、忽略晚回覆、核對documentId及revision；不取代host授權 |
-| 產品UI | dist/app.js等為參考 | 先顯示loading/error/partial；診斷不能只進console；沿用功能檢核與視覺契約 |
+| 請求競態 | src/application/controller.ts | 新請求取消舊signal、忽略晚回覆、核對documentId及revision；不取代host授權 |
+| 產品UI | src/ui/app.ts等為參考 | 先顯示loading/error/partial；診斷不能只進console；沿用功能檢核與視覺契約 |
 
 ## 保存格式與身分
 
@@ -46,7 +46,7 @@ ID規則：新區塊與貼上的副本取新ID；內容修改保留；拆分保�
 
 ## 欄位與renderer政策
 
-可機器核對的完整欄位白名單在 `dist/compare.js` 的fields。新增欄位不會自動被接受；unknown欄位、節點版本或未支援呈現會降級。變更這份政策必須新增正反例。
+可機器核對的完整欄位白名單在 `src/handlers/builtins.ts` 的欄位政策。新增欄位不會自動被接受；unknown欄位、節點版本或未支援呈現會降級。變更這份政策必須新增正反例。
 
 | 類型 | 目前比較／呈現 | host調整與必測 |
 | --- | --- | --- |
@@ -70,3 +70,7 @@ ID規則：新區塊與貼上的副本取新ID；內容修改保留；拆分保�
 6. 以公司真實長度匿名化文件完成D/P/I，再以代表性reviewer任務驗證H。未通過不得把本套件狀態升級成production-ready。
 
 不必把原型全域DOM IDs移植到React；可以替換UI實作，但不能以換框架為由丟掉已驗收的使用者能力。無公司存取權的Agent應交付conditional plan與Unknown清單，而不是虛構產品檔案路徑。
+
+## TypeScript 與能力注入
+
+v0.2 的型別、集中設定、handler／renderer 範例、API 遷移說明見 [MAINTENANCE.md](MAINTENANCE.md)。先 build 再用 package exports，禁止依賴已刪除的 src/*.mjs。UI 參考程式只讀 demo 的比較投影；正式產品須將 compareSnapshots 的 diagnostics、runtime 狀態與原始 snapshots 一起接入，不能跳過 runtime adapter。

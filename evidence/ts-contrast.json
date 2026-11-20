@@ -1,0 +1,32 @@
+{
+  "body": {
+    "foreground": "24343b",
+    "background": "ffffff",
+    "ratio": 12.888467862777006
+  },
+  "muted": {
+    "foreground": "57676e",
+    "background": "f3f5f7",
+    "ratio": 5.38158725543003
+  },
+  "add": {
+    "foreground": "174e85",
+    "background": "e8f1fd",
+    "ratio": 7.477711477962666
+  },
+  "remove": {
+    "foreground": "913d4e",
+    "background": "fbecef",
+    "ratio": 6.153509087689121
+  },
+  "warning": {
+    "foreground": "78511b",
+    "background": "fff7e8",
+    "ratio": 6.592720708409514
+  },
+  "policy": {
+    "foreground": "50656f",
+    "background": "edf2f4",
+    "ratio": 5.421769156465441
+  }
+}

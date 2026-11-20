@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {prepareSnapshot,compareSnapshots,canonical,plain} from '../src/index.mjs';
-import {createReferenceEditor} from '../src/reference-registry.mjs';
+import {prepareSnapshot,compareSnapshots,canonical,plain} from '../dist/reference/index.js';
+import {createReferenceEditor} from '../dist/reference/registry.js';
 import {$getRoot,$createParagraphNode,$createTextNode} from 'lexical';
 import {$createTableNode,$createTableRowNode,$createTableCellNode} from '@lexical/table';
 const options={createEditor:createReferenceEditor};

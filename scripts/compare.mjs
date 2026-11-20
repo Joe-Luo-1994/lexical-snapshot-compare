@@ -1,8 +1,8 @@
 import {readFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
-import {compareSnapshots} from '../src/index.mjs';
-import {createReferenceEditor} from '../src/reference-registry.mjs';
+import {compareSnapshots} from '../dist/reference/index.js';
+import {createReferenceEditor} from '../dist/reference/registry.js';
 const [aPath,bPath,...flags]=process.argv.slice(2);
 if(!aPath||!bPath){console.error('Usage: npm run compare -- a.json b.json [--registry ./host-registry.mjs]');process.exitCode=2;}
 else {

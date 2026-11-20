@@ -4,7 +4,7 @@
 
 **公司內 Agent 從 [AGENT-HANDOFF.md](docs/AGENT-HANDOFF.md) 開始。** 本套件可直接驗證與呼叫比較核心；正式產品的 node registry、身分持久化、版本 API、renderer 與權限仍須在公司內查證，不是免調整的產品外掛。
 
-![公開技術文章的程式碼前後核對](evidence/article-tech-code.jpg)
+![TypeScript 版技術文章前後核對](evidence/ts-tech-code.jpg)
 
 ## 五分鐘本機試用
 
@@ -20,6 +20,7 @@ npm start
 
 - **公開技術文章**：Kubernetes 探針設定，含完整文章、六份固定版本 YAML、程式碼、混合格式、引用及清單。保留未展開網站標記並記錄轉錄限制。
 - **公開規範文章**：CNCF 繁體中文社群行為準則，含禁止事項、回覆期限、連結及修訂權限。
+- **擴充演練**：新增 callout handler／renderer，未改配對核心。側欄可切換標準、保守、精簡設定；切設定會開始新比較 session。
 - **45 組既有合成情境**：12章上線文件、38列對照表、長 URL、image、video、合併表格、Mermaid、quote、collapse、未知節點及故障反例。
 
 公開文章的 B 版是刻意製作的審查演練，**不是上游真實修訂史，也不能當操作或規範建議**。原文來源、commit、授權與 SHA-256 見 [來源清單](corpus/SOURCES.json)；修訂答案在 [snapshots](corpus/snapshots/)，建議試用前不要先看答案。
@@ -37,8 +38,8 @@ npm start
 Markdown 只用於製作公開文章測資；正式比較不經 Markdown／HTML round-trip。公開文章原始 JSON 無自訂 `blockId` 污染，身分存在 `identity.nodes`，比較時才加到副本。**缺 ID 不從位置／文字猜配對。** Sidecar 的 path 只定位「這一版」的 node，跨版本關聯依儲存的 ID；正式保存流程仍須實作／查證此契約。
 
 ```js
-import {compareSnapshots} from './src/index.mjs';
-import {createReferenceEditor} from './src/reference-registry.mjs';
+import {compareSnapshots} from './dist/reference/index.js';
+import {createReferenceEditor} from './dist/reference/registry.js';
 
 const result = compareSnapshots(savedA, savedB, {
   createEditor: createReferenceEditor, // 只適用本套件標準0.18節點；公司需換成實際registry
@@ -61,14 +62,14 @@ CLI exit code：0 runtime檢查就緒、2 輸入／執行失敗、3 部分可讀
 | [接入與調整契約](docs/INTEGRATION.md) | API、版本／ID、registry、renderer、權限與失敗邊界 |
 | [功能檢核表](docs/FEATURE-CHECKLIST.md) | 現行能力逐一列出可接受／不可接受與證據方式 |
 | [正式驗收標準](docs/ACCEPTANCE.md) | 27條標準；D/P/H/I四種證據不可混淆 |
-| [本輪 Review](docs/REVIEW.md) | 測試、真實畫面、修正與剩餘缺口 |
+| [本輪 TypeScript Review](docs/REVIEW-TYPESCRIPT.md) | 測試、真實畫面、修正與剩餘缺口 |
 | [Review 模板](docs/REVIEW-TEMPLATE.md) | 每次方案／實作變更均需填寫 |
 | [授權與來源](THIRD-PARTY-NOTICES.md) | 公開文章、轉錄與程式碼的授權界線 |
 
-`src/` 為可呼叫的接入層；`dist/compare.js` 為比較核心；`dist/app.js` 是完整 vanilla DOM 範例，尚未封裝成 React component。公司可沿用視覺與互動契約，以現有 renderer 實作 UI。`createComparisonController` 提供非同步 loading、拒絕過期回覆與 revision 身分核對；它不實作公司授權。
+`src/` 是 strict TypeScript 來源；`dist/` 全部由 build 生成，含型別宣告，禁止手改。`src/core` 是純比較核心，`src/ui` 是 vanilla DOM 參考介面，尚未封裝成 React component。公司可沿用視覺與互動契約，以現有 renderer 實作 UI。`createComparisonController` 提供非同步 loading、拒絕過期回覆與 revision 身分核對；它不實作公司授權。
 
 `npm run corpus:build` 可從固定來源離線再生 JSON；`npm run corpus:check` 驗證來源雜湊及所有生成物無漂移。`npm run verify` 包含此檢查、引擎、runtime、控制器及既有反例測試。GitHub CI 在 Node22／24 執行相同指令。
 
 驗證支持的是本套件的行為。正式 Lexical custom-node 相容性、使用者理解／速度、美感感受與權限正確性，需要公司內證據。不得以本套件測試通過代替產品驗收。
 
-擴充與功能開關依 [X1–X8契約](docs/EXTENSION-CONTRACT.md) 驗收；`npm run lint` 已加入 verify 與 CI。lint 支援新 TypeScript 模組的架構檢查，完整 TS 重寫／policy resolver 尚待實作。
+擴充與功能開關依 [X1–X8契約](docs/EXTENSION-CONTRACT.md) 驗收；`npm run lint` 已加入 verify 與 CI。目前 v0.2 已完成 strict TypeScript runtime、handler registry、集中 policy resolver；沒有遷移例外。新增節點與功能開關請從 [維護與擴充指南](docs/MAINTENANCE.md) 開始。

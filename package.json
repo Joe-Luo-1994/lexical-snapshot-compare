@@ -1,23 +1,41 @@
 {
   "name": "@snapshot-compare/portable",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "engines": {
     "node": ">=22.13.0"
   },
   "exports": {
-    ".": "./src/index.mjs",
-    "./reference-registry": "./src/reference-registry.mjs"
+    ".": {
+      "types": "./dist/reference/index.d.ts",
+      "import": "./dist/reference/index.js"
+    },
+    "./reference-registry": {
+      "types": "./dist/reference/registry.d.ts",
+      "import": "./dist/reference/registry.js"
+    },
+    "./ui": {
+      "types": "./dist/ui/app.d.ts",
+      "import": "./dist/ui/app.js"
+    }
   },
   "scripts": {
-    "start": "node server.mjs",
+    "start": "npm run build && node server.mjs",
     "test": "node --test tests/*.test.mjs",
     "corpus:build": "node scripts/build-corpus.mjs",
     "corpus:check": "node scripts/build-corpus.mjs --check",
     "compare": "node scripts/compare.mjs",
-    "verify": "npm run lint && npm run corpus:check && npm test",
-    "lint": "eslint . --max-warnings 0"
+    "verify": "npm run lint && npm run format:check && npm run typecheck && npm run corpus:check && npm test",
+    "lint": "eslint . --max-warnings 0",
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "pretest": "npm run build",
+    "precompare": "npm run build",
+    "precorpus:build": "npm run build",
+    "precorpus:check": "npm run build",
+    "format": "prettier --write src tooling eslint.config.mjs tests/architecture.test.mjs",
+    "format:check": "prettier --check src tooling eslint.config.mjs tests/architecture.test.mjs"
   },
   "dependencies": {
     "@lexical/code": "0.18.0",
@@ -35,6 +53,7 @@
     "@eslint/js": "10.0.1",
     "eslint": "10.15.0",
     "globals": "17.14.0",
+    "prettier": "3.10.1",
     "typescript": "5.9.3",
     "typescript-eslint": "8.73.0"
   }

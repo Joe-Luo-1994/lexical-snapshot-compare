@@ -1,6 +1,6 @@
 # TypeScript 重構提案
 
-2026-11-20；狀態：提案，未實作。目的：公司 Agent 新增 node 或開關時，可局部修改、知道影響及驗收方式；保留目前 reviewer 的閱讀能力與不誤導原則。依據目前 compare.js、presentation.js、app.js、runtime adapter、controller 與27條驗收標準。公司實際 registry、框架與 feature flag 服務仍 Unknown。
+2026-11-20；狀態：v0.2 已實作。本文保留設計理由與遷移順序；現行入口及 API 差異見 [MAINTENANCE.md](MAINTENANCE.md)，驗收見 [REVIEW-TYPESCRIPT.md](REVIEW-TYPESCRIPT.md)。目的：公司 Agent 新增 node 或開關時，可局部修改、知道影響及驗收方式；保留目前 reviewer 的閱讀能力與不誤導原則。依據目前 compare.js、presentation.js、app.js、runtime adapter、controller 與27條驗收標準。公司實際 registry、框架與 feature flag 服務仍 Unknown。
 
 ## 邊界與依賴
 

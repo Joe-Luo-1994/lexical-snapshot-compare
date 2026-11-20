@@ -1,0 +1,47 @@
+[
+  {
+    "focused": true,
+    "step": "before-mode",
+    "top": 88.22917175292969
+  },
+  {
+    "focused": true,
+    "step": "after-mode",
+    "top": 88.22917175292969
+  },
+  {
+    "step": "after-swap",
+    "text": "切換窗口與監控\n文字變更\n03\n−「10」 ＋「5」 分鐘；−「98.5%」 ＋「99.5%」；−「可以」 ＋「必須」\n基準 A · 原內容\n\n連續 10 分鐘支付成功率低於 98.5% 時，可以中止切換並恢復原路由。\n\n目標 B · 新內容\n\n連續 5 分鐘支付成功率低於 99.5% 時，必須中止切換並恢復原路由。",
+    "top": 88.22917175292969
+  },
+  {
+    "label": "整區核對",
+    "reason": "目前設定採整區核對；表格變動仍保留，請閱讀完整前後表格。",
+    "rows": [
+      37,
+      37
+    ],
+    "step": "conservative-table"
+  },
+  {
+    "hiddenControls": [
+      {
+        "id": "download",
+        "visible": false
+      },
+      {
+        "id": "split",
+        "visible": false
+      }
+    ],
+    "scrollWidth": 375,
+    "step": "compact390",
+    "width": 375
+  },
+  {
+    "focused": "record-article-policy-n041",
+    "scrollWidth": 608,
+    "step": "native200-keyboard-policy",
+    "width": 608
+  }
+]
